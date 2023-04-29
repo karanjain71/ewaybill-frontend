@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div class="nav-class">
     <v-navigation-drawer  
+      :mini-variant.sync="mini"
       v-model="drawer"
       app
       dark
+      style="backgroundColor: #000022"
       >
       <v-list-item class="">
         <v-list-item-icon>
           <router-link to="/" style="text-decoration:none;">
           <v-img
-            src="../assets/images/logo.svg"
+            src="../assets/images/logo.png"
             max-height="30"
             max-width="30"
           ></v-img>
@@ -50,7 +52,7 @@
       </v-list>
     </v-navigation-drawer>
       <v-app-bar class="flex-grow-0" app>
-        <v-app-bar-nav-icon @click.stop="mini = !mini"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click.stop="(mini) = !mini"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-menu
         left
@@ -74,7 +76,7 @@
             <v-list-item three-line>
               <v-list-item-content>
                 <div class="text-overline mb-2">
-                  Welcome
+                  Welcome, {{ this.userDetails.email}}
                 </div>
               </v-list-item-content>
 
@@ -88,8 +90,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 import consts from '../helpers/constants.js';
+// import store from './../store/index'
+
 export default {
   name: 'AppHeader',
   data: () => ({
@@ -100,12 +105,18 @@ export default {
         [
           { title: consts.DASHBOARD, icon: 'mdi-clipboard', route: '/' },
           { title: consts.CREATE_EWAYBILL, icon: 'mdi-calculator', route: '/create-ewaybill' },
+          { title: consts.COMPLETED, icon: 'mdi-history', route: '/archived-ewaybills' },
         ]
     ],
     drawer: true,
-    mini: true,
+    mini: false,
     dark:false,
   }),
+  computed: {
+    ...mapGetters({
+      userDetails: "userDetails/getUserDetails"
+    })
+  },
 };
 </script>
 <style scoped>

@@ -1,8 +1,44 @@
 <template>
-
     <div class="container">
-        <h3 class="align-center mt-8 ml-6">Create a new eway-bill</h3>
-        <v-form class="ml-6 mt-4">
+        <span>
+            <h3 class="align-center mt-8 ml-6">Create a new eway-bill</h3>
+            <v-form class="ml-6" ref="pdfForm">
+                <v-container>
+                    <v-row justify="center" align="center">
+                        <v-col md="2">
+                            <p>Upload Ewaybill</p>
+                        </v-col>
+                        <v-col>
+                            <v-file-input
+                            v-model="file"
+                            chips
+                            label="Upload ewaybill"
+                            outlined
+                            dense
+                            placeholder="Select your files"
+                            :show-size="1000"
+                            ></v-file-input>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-btn
+                            class="ml-3 mr-4 mb-8"
+                            @click="uploadEwaybillPdf"
+                        >
+                            Submit
+                        </v-btn>
+                        <v-btn
+                            class="ml-3 mr-4 mb-8"
+                            @click="clearAttachment"
+                        >
+                            Clear
+                        </v-btn>
+                    </v-row>
+                </v-container>
+            </v-form>
+        </span>
+        <h5 class="align-center mt-8 ml-6">Or, Enter details</h5>
+        <v-form class="ml-6 mt-4" ref="manualForm">
         <v-container>
             <v-row justify="center" align="center">
                 <v-col md="2">
@@ -14,6 +50,7 @@
                         type="text"
                         outlined
                         label="Ewaybill Number"
+                        :rules="nameRules"
                         required
                     ></v-text-field>
                 </v-col>
@@ -28,6 +65,7 @@
                         type="number"
                         outlined
                         label="Distance"
+                        :rules="distanceRules"
                         required
                     ></v-text-field>
                 </v-col>
@@ -43,6 +81,7 @@
                         outlined
                         label="Generation Time"
                         required
+                        :rules="generationTimeRules"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -57,6 +96,7 @@
                         outlined
                         label="Source Address"
                         required
+                        :rules="sourceAddressRules"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -71,20 +111,22 @@
                         outlined
                         label="Destination Address"
                         required
+                        :rules="destAddressRules"
                     ></v-text-field>
                 </v-col>
             </v-row>
             <v-row justify="center" align="center">
                 <v-col md="2">
-                    <p>Status</p>
+                    <p>Party Name</p>
                 </v-col>
                 <v-col>
                     <v-text-field
-                        v-model="status"
+                        v-model="party_name"
                         type="text"
                         outlined
-                        label="Status"
+                        label="Party Name"
                         required
+                        :rules="partyNameRules"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -99,18 +141,20 @@
                         outlined
                         label="Vehicle Number"
                         required
+                        :rules="vehicleNumberRules"
                     ></v-text-field>
                 </v-col>
             </v-row>
             <v-row>
                 <v-btn
                     class="ml-3 mr-4 mb-8"
-                    @click="submit"
+                    @click="uploadEwaybill"
                 >
                     Submit
                 </v-btn>
                 <v-btn
                     class="ml-3 mr-4 mb-8"
+                    @click="clearForm"
                 >
                     Clear
                 </v-btn>
@@ -122,7 +166,8 @@
 </template>
 
 <script>
-    import {postCreateEwaybill} from "../helpers/backend_helper"
+    import {postCreateEwaybill, postCreateEwaybillPdf} from "../helpers/backend_helper"
+    import store from '@/store/index'
   export default {
     name: "CreateEwaybill",
     data: () => ({
@@ -131,24 +176,99 @@
       generation_time: "",
       source_address: "",
       destination_address: "",
-      status: "",
+      status: "New",
       vehicle_number: "",
+      party_name: "",
+      file: [],
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+      ],
+      distanceRules: [
+        v => !!v || 'Distance is required',
+        v => (v && v >= 0) || 'Distance should be positive',
+      ],
+      generationTimeRules: [
+        v => !!v || 'Generation time is required',
+      ],
+      sourceAddressRules: [
+        v => !!v || 'Source address is required',
+      ],
+      destAddressRules: [
+        v => !!v || 'Destination address is required',
+      ],
+      partyNameRules: [
+        v => !!v || 'Party Name is required',
+      ],
+      vehicleNumberRules: [
+        v => !!v || 'Vehicle Number is required',
+      ],
     }),
     methods: {
-        async submit(){
+        async uploadEwaybill(){
             const payload = {
                 "ewaybillNumber" : this.ewaybill_number,
                 "distance" : this.distance,
-                "generationTime" : this.eneration_time,
+                "generationTime" : this.generation_time,
                 "sourceAddress" : this.source_address,
                 "destAddress" : this.destination_address,
                 "status" : this.status,
-                "vehicleNumber" : this.vehicle_number
+                "vehicleNumber" : this.vehicle_number,
+                "partyName" : this.party_name
             }
-            const response = await postCreateEwaybill(payload)
-            console.log(response)
+            if(this.$refs.manualForm.validate()){
+                const response = postCreateEwaybill(payload)
+                console.log("coming here ")
+                this.$refs.manualForm.reset()
+                console.log(response)
+            }
+            else{
+                store.dispatch('notifications/setNotificationsList', {text: 'Error in form. Please fill all fields properly',color: 'red'})
+            }
 
+            
+            
+
+        },
+        async uploadEwaybillPdf(){
+            const response = await postCreateEwaybillPdf(this.file);
+            this.$refs.pdfForm.reset()
+            console.log(response)
+            console.log(this.file + " here")
+        },
+        clearAttachment(){
+            this.file = []
+        },
+        clearForm(){
+            this.ewaybill_number = ""
+            this.distance = ""
+            this.generation_time = ""
+            this.source_address = ""
+            this.vehicle_number = ""
+            this.party_name = ""
         }
     }
   }
 </script>
+
+// remove slash from the end of vehicle number - done
+//we have to handle the case when the vehiclenumber is in next line
+//12,11
+//14 - distance is 0
+//13 - nothing
+//delivered date should not be future date - done
+//100 ewaybills testing - doing
+// email table - done
+//data should update without refresh - done
+//try to fetch data from a table in spring and change this approach
+//fix if one condition fails, it does not break out of the function and tries other things
+//table designing in frontend
+//how to get the scss values from vuetify 
+//setup scss files in ewaybill and chalet
+//store the token in cookies and expire it 30 mins
+//setup notifications in frontend - done
+//setup proper messaging in case of errors and all - done
+//setup whatsapp setup 
+//setup vuetify store in frontend to catch the user details in all pages
+//form validation in vuetify - done
+

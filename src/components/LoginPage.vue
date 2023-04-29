@@ -34,7 +34,7 @@
           <v-row>
             <v-btn
               class="mr-4"
-              @click="submit"
+              @click="loginUser"
             >
               Login
             </v-btn>
@@ -57,6 +57,8 @@
 
 <script>
 import {postLogin} from "@/helpers/backend_helper"
+import store from "./../store/index"
+import router from '@/router'
   export default {
     name: "LoginPage",
     data: () => ({
@@ -68,9 +70,11 @@ import {postLogin} from "@/helpers/backend_helper"
     }),
 
     methods: {
-       async submit () {
+       async loginUser () {
         const response = await postLogin(this.email, this.password)
+        store.dispatch("userDetails/setUserDetailsAction", {email:this.email})
         localStorage.setItem('token', response.token);
+        router.push('/')
         console.log(response)
 
       },

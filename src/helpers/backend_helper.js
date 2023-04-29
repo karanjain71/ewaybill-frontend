@@ -1,15 +1,16 @@
 import * as url from './url_helper'
 // import axiosApi from "./api_helper"
 // import store from '@/store'
-import axios from 'axios'
+import axiosApi from './api_helper'
+import store from './../store/index'
 
-export const postLogin = (email, password) => {
+export const postLogin = async (email, password) => {
   const payload = {
     "email": email,
     "password": password
   }
   console.log(payload, url.POST_LOGIN, " payload")
-  return axios.post("http://localhost:8080/api/auth/login", payload)
+  return axiosApi.post(url.POST_LOGIN, payload)
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -21,9 +22,9 @@ export const postLogin = (email, password) => {
   })
 }
 
-export const postRegister = (payload) => {
+export const postRegister = async (payload) => {
 
-  return axios.post("http://localhost:8080/api/auth/register", payload)
+  return axiosApi.post(url.POST_REGISTER, payload)
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -35,9 +36,9 @@ export const postRegister = (payload) => {
   })
 }
 
-export const postForgotPassword = (payload) => {
+export const postForgotPassword = async (payload) => {
 
-  return axios.post("http://localhost:8080/api/auth/forgot-password", payload)
+  return axiosApi.post(url.POST_FORGOT_PASSWORD, payload)
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -49,13 +50,48 @@ export const postForgotPassword = (payload) => {
   })
 }
 
-export const postCreateEwaybill = (payload) => {
+export const postCreateEwaybill = async (payload) => {
 
-  return axios.post("http://localhost:8080/api/ewaybills", payload,{headers: {
-    "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXJhbmphaW43MUBnbWFpbC5jb20iLCJpYXQiOjE2NzUwMTkwMjQsImV4cCI6MTY3NTcxOTAyM30.wYZSOXEpoldfquKG3Wg_fK8njk6KoxdlmDig4S0Gz6Me0Dg1Ke3a3jwLWYJh719reR3NSNG65uqhCtJhhXgS_Q"
+  return axiosApi.post(url.POST_CREATE_EWAYBILL, payload)
+  .then(response => {
+    if (response.status >= 200 || response.status <= 299) {
+      store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Added Successfully',color: 'green'})
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while adding ewaybill. Please retry',color: 'red'})
+    console.log(err)
+  })
+}
+
+
+export const postCreateEwaybillPdf = async (payload) => {
+  console.log(payload, "coming ehre with paylaod")
+  return axiosApi.post(url.POST_CREATE_EWAYBILL_PDF, {
+    "file": payload
+  },{headers: {
+    "Content-Type": "multipart/form-data"
 }})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
+      store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Added Successfully',color: 'green'})
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while uploading ewaybill. Please retry',color: 'red'})
+    console.log(err)
+  })
+}
+
+export const getAllEwaybills = async () => {
+
+  return axiosApi.get(url.GET_ALL_EWAYBILLS)
+  .then(response => {
+    if (response.status >= 200 || response.status <= 299) {
       return response.data
     }
     throw response.data
@@ -65,11 +101,10 @@ export const postCreateEwaybill = (payload) => {
   })
 }
 
-export const getAllEwaybills = () => {
 
-  return axios.get("http://localhost:8080/api/ewaybills",{headers: {
-    "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXJhbmphaW43MUBnbWFpbC5jb20iLCJpYXQiOjE2NzUwMTkwMjQsImV4cCI6MTY3NTcxOTAyM30.wYZSOXEpoldfquKG3Wg_fK8njk6KoxdlmDig4S0Gz6Me0Dg1Ke3a3jwLWYJh719reR3NSNG65uqhCtJhhXgS_Q"
-}})
+export const getArchivedEwaybills = async () => {
+
+  return axiosApi.get(url.GET_ARCHIVED_EWAYBILLS)
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -77,6 +112,43 @@ export const getAllEwaybills = () => {
     throw response.data
   })
   .catch(err=> {
+    console.log(err)
+  })
+}
+
+export const updateEwaybill = async (payload) => {
+  console.log(JSON.stringify(payload) + " is coming here")
+  return axiosApi.put(url.UPDATE_EWAYBILL + `/${payload.id}`, payload)
+  .then(response => {
+    console.log(response + " is the respone")
+    if(response.status>=200 && response.status<=299){
+      store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Updated Successfully',color: 'green'})
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error in updating ewaybill. Please retry',color: 'red'})
+    console.log(err)
+  })
+}
+
+
+export const deleteEwaybillItem = async (id) => {
+
+  return axiosApi.delete(url.DELETE_EWAYBILL + `/${id}`)
+  .then(response => {
+    console.log(JSON.stringify(response) + "printing here")
+    console.log(response.status + "printing here 2")
+    if(response.status>=200 && response.status<=299){
+      console.log(response.status + " here ")
+      store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Deleted Successfully',color: 'green'})
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: 'Unable to delete ewaybill',color: 'red'})
     console.log(err)
   })
 }

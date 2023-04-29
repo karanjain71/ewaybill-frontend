@@ -4,6 +4,7 @@ import PageNotFound from '../components/PageNotFound.vue';
 import ForgotPassword from '../components/ForgotPassword.vue';
 import DashboardPage from '../components/DashboardPage.vue';
 import CreateEwaybill from '../components/CreateEwaybill.vue';
+import ArchivedEwaybills from '../components/ArchivedEwaybills.vue';
 
 const routes = [
     {
@@ -26,6 +27,14 @@ const routes = [
                     layout: 'AuthLayout',
                 },
                 component: CreateEwaybill
+            },
+            {
+                path: '/archived-ewaybills',
+                name: 'ArchivedEwaybills',
+                meta: {
+                    layout: 'AuthLayout',
+                },
+                component: ArchivedEwaybills
             },
         ]
     },
