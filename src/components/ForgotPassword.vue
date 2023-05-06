@@ -1,12 +1,13 @@
 <template>
     <v-card 
         rounded
-        class="mx-auto my-12 p-10"
-        max-width="600"
+        class="mx-auto my-15 p-10 align-center"
+        max-width="430"
+        elevation="0"
     >
-      <div class="container">
-        <h3 class="align-center mt-8 ml-6">Please enter your your to reset password</h3>
-      </div>
+      <v-row align="center" justify="center" class="container mb-3">
+        <h3 class="mt-8">Please enter your email to reset password</h3>
+      </v-row>
       <v-form class="mx-8 mt-4">
         <v-container>
           <v-row>
@@ -19,10 +20,13 @@
           </v-row>
           <v-row>
             <v-btn
-              class="mr-4 mb-8"
-              @click="submit"
+              class="mr-4 py-6 mb-7"
+              @click="forgotPassword"
+              block
+              elevation="0"
+              color="primary"
             >
-              Forgot Password
+              Send link
             </v-btn>
         </v-row>
         </v-container>
@@ -40,7 +44,7 @@
     }),
 
     methods: {
-      async submit () {
+      async forgotPassword () {
         const payload = {
           "email": this.email
         }

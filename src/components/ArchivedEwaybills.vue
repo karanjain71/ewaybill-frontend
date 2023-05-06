@@ -1,14 +1,18 @@
 <template>
-  <v-card class="card-design">
+  <loading-screen v-if="loadingScreen"></loading-screen>
+  <v-card v-else class="card-design">
     <v-card-title >
       Archived Ewaybills
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
-        label="Search"
+        label="Search Ewaybills"
         single-line
         hide-details
+        outlined
+        height="10px"
+
       ></v-text-field>
     </v-card-title>
     <v-data-table class="table-design"
@@ -49,36 +53,36 @@
 
 <script>
   import {getArchivedEwaybills} from "../helpers/backend_helper"
+  import LoadingScreen from "./LoadingScreen.vue"
 
   export default {
+  components: { LoadingScreen },
     name: "ArchivedEwaybills",
     data () {
       return {
         sortBy: [{ key: 'id', order: 'asc' }],
         ewaybills: [],
         search: '',
+        loadingScreen: false,
         headers: [
-          {
-              text: "Id",
-              align: "start",
-              sortable: true,
-              value: "id"
-          },
-          { text: 'Number', align: 'start', value: 'ewaybillNumber' },
-          { text: 'Distance', value: 'distance' },
-          { text: 'Generation Time', value: 'generationTime' },
-          { text: 'Party Name', value: 'partyName' },
-          { text: 'Source Address', value: 'sourceAddress' },
-          { text: 'Destination Address', value: 'destAddress' },
-          { text: 'Status', value: 'status' },
-          { text: 'Vehicle Number', value: 'vehicleNumber' },
-          { text: 'Delivery Time', value: 'deliveredTime' },
+          { text: 'Number', align: 'start', value: 'ewaybillNumber', sortable: false },
+          { text: 'Distance', value: 'distance', sortable: false },
+          { text: 'Generation Time', value: 'generationTime', sortable: false },
+          { text: 'Party Name', value: 'partyName', sortable: false },
+          { text: 'Source Address', value: 'sourceAddress', sortable: false },
+          { text: 'Destination Address', value: 'destAddress', sortable: false },
+          { text: 'Status', value: 'status', sortable: false },
+          { text: 'Vehicle Number', value: 'vehicleNumber', sortable: false },
+          { text: 'Delivery Time', value: 'deliveredTime', sortable: false },
         ],  
       }
     },
     async created(){
+        this.loadingScreen = true;
         const response = await getArchivedEwaybills();
         this.ewaybills = response
+        console.log(this.loading + " is the loading")
+        this.loadingScreen = false
 
     },
     methods: {

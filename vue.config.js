@@ -2,6 +2,17 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   // https://cli.vuejs.org/config/#productionsourcemap
   productionSourceMap: false,
+  css:{
+      extract: { ignoreOrder: true },
+      loaderOptions: {
+          sass: {
+            additionalData: "@import '~@/assets/scss/vuetify/variables'"
+          },
+          scss: {
+            additionalData: "@import '~@/assets/scss/vuetify/variables';"
+          }
+      }
+  },
 
   configureWebpack: {
       resolve: {

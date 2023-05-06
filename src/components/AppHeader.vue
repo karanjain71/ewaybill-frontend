@@ -24,12 +24,11 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider class="mx-2"></v-divider>
-      <v-list class="my-2" dense nav>
+      <v-list class="my-2" dense nav >
         <v-list-group
           v-for="(itemHeader, index) in itemHeaders" :key="itemHeader"
           :value="true"
           sub-group
-          :prepend-icon="itemHeaderIcons[index]"
         >
             <template v-slot:activator>
               <v-list-item-content>
@@ -54,35 +53,35 @@
       <v-app-bar class="flex-grow-0" app>
         <v-app-bar-nav-icon @click.stop="(mini) = !mini"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
-        <v-menu
-        left
-        bottom
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </template>
-
-          <v-card
-            class="mx-auto"
-            max-width="344"
-            outlined
-          >
-            <v-list-item three-line>
-              <v-list-item-content>
-                <div class="text-overline mb-2">
-                  Welcome, {{ this.userDetails.email}}
-                </div>
-              </v-list-item-content>
-
-              <v-icon x-large>mdi-account</v-icon>
+        <v-menu offset-y rounded="lg" nudge-bottom="12" nudge-left="5">
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              icon
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-account</v-icon>
+            </v-btn>
+          </template>
+          <v-list background-color="#3281D5">
+            <v-list-item>
+              <v-list-item-title class="ml-2 bg-primary">
+                  karanjain71@gmail.com
+              </v-list-item-title>
             </v-list-item>
-          </v-card>
+            <v-list-item @click="redirectToProfile">
+              <v-icon class="mx-2">mdi-account</v-icon>
+              <v-list-item-title class="text-muted">
+                  Profile
+              </v-list-item-title>
+            </v-list-item>
+            <v-divider/>
+            <v-list-item >
+              <v-btn elevation="0" color="#ebf2fb" class="px-15 py-5 ml-2 mt-3 mb-2" @click="logoutUser" style="color:#3281D5">
+                    Logout
+              </v-btn>
+            </v-list-item>
+          </v-list>
       </v-menu>
       </v-app-bar>
     </div>
@@ -99,11 +98,10 @@ export default {
   name: 'AppHeader',
   data: () => ({
     consts: consts,
-    itemHeaderIcons: ["mdi-note-plus-outline", "mdi-book-clock-outline"],
     itemHeaders: [consts.DASHBOARD],
     items: [
         [
-          { title: consts.DASHBOARD, icon: 'mdi-clipboard', route: '/' },
+          { title: consts.DASHBOARD, icon: 'mdi-home', route: '/' },
           { title: consts.CREATE_EWAYBILL, icon: 'mdi-calculator', route: '/create-ewaybill' },
           { title: consts.COMPLETED, icon: 'mdi-history', route: '/archived-ewaybills' },
         ]
@@ -117,6 +115,15 @@ export default {
       userDetails: "userDetails/getUserDetails"
     })
   },
+  methods: {
+    logoutUser(){
+      localStorage.removeItem('ewaybillToken')
+      this.$router.push({path: "/login"})
+    },
+    redirectToProfile(){
+      this.$router.push({path: '/profile'})
+    }
+  }
 };
 </script>
 <style scoped>

@@ -1,12 +1,13 @@
 <template>
     <v-card 
         rounded
-        class="mx-auto my-12 p-10"
-        max-width="600"
+        class="mx-auto my-15 p-10 align-center"
+        max-width="430"
+        elevation="0"
     >
-      <div class="container">
-        <h3 class="align-center mt-8 ml-6">Please Login to continue</h3>
-      </div>
+      <v-row align="center" justify="center" class="container mb-3">
+        <h3 class="mt-8">Log in to E-Tracker</h3>
+      </v-row>
       <v-form class="mx-8 mt-4">
         <v-container>
           <v-row>
@@ -23,29 +24,40 @@
               outlined
               label="Password"
               required
-            ></v-text-field>
-          </v-row>
-          <v-row>
-            <v-checkbox
-              v-model="rememberMe"
-              label="Remember Me"
-            ></v-checkbox>
+              :type="show ? 'text' : 'password'"
+            >
+            
+              <template v-slot:append v-if="!show"  >
+                <v-icon @click="show=!show">mdi-eye</v-icon>
+              </template>
+              <template v-slot:append v-else>
+                <v-icon color="primary" @click="show=!show">mdi-eye</v-icon>
+              </template>
+            </v-text-field>
           </v-row>
           <v-row>
             <v-btn
-              class="mr-4"
+              class="mr-4 py-6"
               @click="loginUser"
+              block
+              elevation="0"
+              color="primary"
             >
-              Login
+              Log in
             </v-btn>
-            <a href="http://localhost:8080/api/auth/user">
+            <!-- <a href="http://localhost:8080/api/auth/user">
               <v-btn >
                 Login With Google
               </v-btn>
-            </a>
+            </a> -->
           </v-row>
-          <v-row>
-            <p class="text-muted mt-8" >If you are new, then please register <span style="color:blue;">
+          <v-row align="center" justify="center">
+            <p class="mt-6" style="font-weight:bold" ><span style="color:blue; font-weight: bold">
+            <a @click="forgotPassword">Forgot Password?</a>
+            </span> </p>
+          </v-row>
+          <v-row align="center" justify="center" class="my-3">
+            <p class="mt-2" style="font-weight:bold" >Not a member yet? Register <span style="color:blue; font-weight: bold">
             <a @click="registerPage">here</a>
             </span> </p>
           </v-row>
@@ -63,17 +75,19 @@ import router from '@/router'
     name: "LoginPage",
     data: () => ({
       loading: false,
-      selection: 1,
-      email: "",
-      password: "",
+      email: "jainkaran049@gmail.com",
+      password: "12345",
       rememberMe: false,
+      show: false
     }),
 
     methods: {
        async loginUser () {
         const response = await postLogin(this.email, this.password)
+        console.log("logging with" + this.email)
+        console.log(response + " printing response")
+        localStorage.setItem('ewaybillToken', response.token);
         store.dispatch("userDetails/setUserDetailsAction", {email:this.email})
-        localStorage.setItem('token', response.token);
         router.push('/')
         console.log(response)
 
@@ -86,7 +100,17 @@ import router from '@/router'
 
       registerPage(){
         this.$router.push("/register")
+      },
+      forgotPassword(){
+        this.$router.push("/forgot-password")
       }
     },
   }
 </script>
+
+<style scoped>
+  
+.v-input__icon--append .v-icon { 
+    color: purple;
+}
+</style>

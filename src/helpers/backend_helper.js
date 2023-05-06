@@ -10,35 +10,39 @@ export const postLogin = async (email, password) => {
     "password": password
   }
   console.log(payload, url.POST_LOGIN, " payload")
-  return axiosApi.post(url.POST_LOGIN, payload)
+  return axiosApi.post(url.POST_LOGIN, payload, {addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
+      store.dispatch('notifications/setNotificationsList', {text: 'LoggedIn successfully',color: 'green'})
       return response.data
     }
     throw response.data
   })
   .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while login, please check credentials',color: 'red'})
     console.log(err)
   })
 }
 
 export const postRegister = async (payload) => {
 
-  return axiosApi.post(url.POST_REGISTER, payload)
+  return axiosApi.post(url.POST_REGISTER, payload,{addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
+      store.dispatch('notifications/setNotificationsList', {text: 'User registered successfully',color: 'green'})
       return response.data
     }
     throw response.data
   })
   .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while registering user. Please retry',color: 'red'})
     console.log(err)
   })
 }
 
 export const postForgotPassword = async (payload) => {
 
-  return axiosApi.post(url.POST_FORGOT_PASSWORD, payload)
+  return axiosApi.post(url.POST_FORGOT_PASSWORD, payload, {addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -52,7 +56,7 @@ export const postForgotPassword = async (payload) => {
 
 export const postCreateEwaybill = async (payload) => {
 
-  return axiosApi.post(url.POST_CREATE_EWAYBILL, payload)
+  return axiosApi.post(url.POST_CREATE_EWAYBILL, payload, {addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Added Successfully',color: 'green'})
@@ -73,7 +77,7 @@ export const postCreateEwaybillPdf = async (payload) => {
     "file": payload
   },{headers: {
     "Content-Type": "multipart/form-data"
-}})
+}, addToken: true})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Added Successfully',color: 'green'})
@@ -89,7 +93,7 @@ export const postCreateEwaybillPdf = async (payload) => {
 
 export const getAllEwaybills = async () => {
 
-  return axiosApi.get(url.GET_ALL_EWAYBILLS)
+  return axiosApi.get(url.GET_ALL_EWAYBILLS, {addToken: true})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -97,6 +101,7 @@ export const getAllEwaybills = async () => {
     throw response.data
   })
   .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while fetching ewaybills',color: 'red'})
     console.log(err)
   })
 }
@@ -104,7 +109,7 @@ export const getAllEwaybills = async () => {
 
 export const getArchivedEwaybills = async () => {
 
-  return axiosApi.get(url.GET_ARCHIVED_EWAYBILLS)
+  return axiosApi.get(url.GET_ARCHIVED_EWAYBILLS, {addToken: true})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       return response.data
@@ -112,13 +117,14 @@ export const getArchivedEwaybills = async () => {
     throw response.data
   })
   .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: 'Error while fetching ewaybills',color: 'red'})
     console.log(err)
   })
 }
 
 export const updateEwaybill = async (payload) => {
   console.log(JSON.stringify(payload) + " is coming here")
-  return axiosApi.put(url.UPDATE_EWAYBILL + `/${payload.id}`, payload)
+  return axiosApi.put(url.UPDATE_EWAYBILL + `/${payload.id}`, payload, {addToken: true})
   .then(response => {
     console.log(response + " is the respone")
     if(response.status>=200 && response.status<=299){
@@ -136,7 +142,7 @@ export const updateEwaybill = async (payload) => {
 
 export const deleteEwaybillItem = async (id) => {
 
-  return axiosApi.delete(url.DELETE_EWAYBILL + `/${id}`)
+  return axiosApi.delete(url.DELETE_EWAYBILL + `/${id}`, {addToken: true})
   .then(response => {
     console.log(JSON.stringify(response) + "printing here")
     console.log(response.status + "printing here 2")

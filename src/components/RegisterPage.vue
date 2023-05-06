@@ -1,11 +1,12 @@
 <template>
     <v-card 
         rounded
-        class="mx-auto my-12 p-10"
-        max-width="600"
+        class="mx-auto my-15 p-10 align-center"
+        max-width="450"
+        elevation="0"
     >
       <div class="container">
-        <h3 class="align-center mt-8 ml-6">Please Register to continue</h3>
+        <h3 class="align-center mt-8 ml-6">Register to E-Tracker</h3>
       </div>
       <v-form class="mx-8 mt-4" v-model="form">
         <v-container>
@@ -31,7 +32,16 @@
               outlined
               label="Password"
               required
-            ></v-text-field>
+              :type="show ? 'text' : 'password'"
+            >
+            
+              <template v-slot:append v-if="!show"  >
+                <v-icon @click="show=!show">mdi-eye</v-icon>
+              </template>
+              <template v-slot:append v-else>
+                <v-icon color="primary" @click="show=!show">mdi-eye</v-icon>
+              </template>
+            </v-text-field>
           </v-row>
           <v-row>
             <v-text-field
@@ -43,20 +53,23 @@
           </v-row>
           <v-row>
             <v-btn
-              class="mr-4"
+              class="mr-4 py-6"
               @click="submit"
+              block
+              elevation="0"
+              color="primary"
             >
               Register
             </v-btn>
-            <v-btn
+            <!-- <v-btn
               class="mr-4"
               @click="registerWithGoogle"
             >
               Register with Google
-            </v-btn>
+            </v-btn> -->
           </v-row>
-          <v-row>
-            <p class="text-muted mt-8" >If you are previously logged in, please login <span style="color:blue;">
+          <v-row align="center" justify="center" class="my-3">
+            <p class="mt-8" style="font-weight:bold" >Already a member? Log in <span style="color:blue; font-weight: bold">
             <a @click="loginPage">here</a>
             </span> </p>
           </v-row>
@@ -72,6 +85,7 @@
     name: "RegisterPage",
     data: () => ({
       loading: false,
+      show: false,
       name: "",
       email: "",
       password: "",

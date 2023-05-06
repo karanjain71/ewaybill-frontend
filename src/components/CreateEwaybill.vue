@@ -22,13 +22,19 @@
                     </v-row>
                     <v-row>
                         <v-btn
-                            class="ml-3 mr-4 mb-8"
+                            class="v-btn-submit"
                             @click="uploadEwaybillPdf"
+                            color="primary"
                         >
                             Submit
                         </v-btn>
                         <v-btn
+                            text="true"
+                            medium
+                            color="primary"
+                            elevation="0"
                             class="ml-3 mr-4 mb-8"
+                            outlined
                             @click="clearAttachment"
                         >
                             Clear
@@ -67,6 +73,7 @@
                         label="Distance"
                         :rules="distanceRules"
                         required
+                        class="pa-0"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -82,6 +89,7 @@
                         label="Generation Time"
                         required
                         :rules="generationTimeRules"
+                        :max="nowDate"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -147,14 +155,20 @@
             </v-row>
             <v-row>
                 <v-btn
-                    class="ml-3 mr-4 mb-8"
+                    class="v-btn-submit"
                     @click="uploadEwaybill"
+                    medium
                 >
                     Submit
                 </v-btn>
                 <v-btn
                     class="ml-3 mr-4 mb-8"
+                    outlined
                     @click="clearForm"
+                    text="true"
+                    medium
+                    color="primary"
+                    elevation="0"
                 >
                     Clear
                 </v-btn>
@@ -180,6 +194,7 @@
       vehicle_number: "",
       party_name: "",
       file: [],
+      nowDate: new Date().toISOString().slice(0,10),
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
@@ -250,6 +265,10 @@
     }
   }
 </script>
+
+<style scoped>
+    
+</style>
 
 // remove slash from the end of vehicle number - done
 //we have to handle the case when the vehiclenumber is in next line

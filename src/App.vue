@@ -30,7 +30,15 @@
         </template>
       </v-snackbar>
     </v-main>
-      
+    <v-footer class="bg-grey-lighten-1  ml-4 pt-8 pb-3" >
+      <v-row justify="center" no-gutters>
+        <v-col class="text-center mt-4" cols="12">
+          Copyright
+          <v-icon color="black">mdi-copyright</v-icon>
+          {{ new Date().getFullYear() }} — <strong>E-Tracker Team</strong>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
   <v-app v-else>
     <v-main
@@ -74,20 +82,28 @@ export default {
 },
 computed: {
   ...mapGetters({
-    loadingUser: "chalet/getUserLoading",
-    loadingRegion: "metadata/getRegionLoading",
-    loadingMetadata: "metadata/getMetadataLoading",
     snackbars: "notifications/getNotificationsList"
+
   })
 },
+created() {
+  this.$store.dispatch("userDetails/setUserDetailsAction", {})
+}
 };
 </script>
 
-<style scoped>
+<style>
 
   .main-styling{
     font-family: 'Poppins', Arial, Helvetica, sans-serif;
     padding: 0;
     margin: 0
   }
+  .v-btn-submit{
+        box-shadow: none !important;
+        margin: 0 4px 8px 3px;
+        background-color: #3281D5 !important;
+        color: white !important
+  }
+  
 </style>

@@ -1,5 +1,6 @@
 <template>
   <v-progress-circular model-value="20" v-if="apiLoading"></v-progress-circular>
+  <loading-screen v-else-if="loadingScreen"></loading-screen>
   <v-card v-else>
     <v-card-title>
       Ewaybills
@@ -21,12 +22,13 @@
       show-select
     >
       <template v-slot:[`item.status`]="{ item }">
-        <v-select outlined variant="solo" class="py-4" density="compact"
+        <v-select outlined variant="solo" class="pa-0 mt-7 v-select"
         v-model= "item.status"
-        height="50px"
+        height="20px"
         :items="statusItems"
         :item-value="item.status"
         v-on:change="openDeliveryModal(item)"
+        aria-expanded="false"
         >
           {{ item.status }}
         </v-select>
@@ -60,14 +62,15 @@
             <v-btn
               color="green-darken-1"
               variant="text"
+              style="margin: 0 4px 8px 3px;"
               @click="closeDialog()"
             >
               No
             </v-btn>
             <v-btn
-              color="green-darken-1"
               variant="text"
               @click="deliveryModal?changeStatus():confirmDeleteItem()"
+              class="v-btn-submit"
             >
               Yes
             </v-btn>
@@ -80,13 +83,17 @@
 
 <script>
   import {getAllEwaybills, updateEwaybill, deleteEwaybillItem} from "../helpers/backend_helper"
+import LoadingScreen from './LoadingScreen.vue';
 
   export default {
+  components: { LoadingScreen },
     name: "DashboardPage",
+    
     data () {
       return {
         ewaybills: [],
         apiLoading: false,
+        loadingScreen: false,
         dialog: false,
         deliveryModal: false,
         nowDate: new Date().toISOString().slice(0,10),
@@ -98,26 +105,21 @@
         toBeDeleted: 0,
         search: '',
         headers: [
-          {
-              text: "Id",
-              align: "start",
-              sortable: true,
-              value: "index",
-              class: "text-primary"
-          },
           { text: 'Number', align: 'start', sortable: false, value: 'ewaybillNumber' },
-          { text: 'Distance', value: 'distance' },
-          { text: 'Generation Time', value: 'generationTime' },
-          { text: 'Source Address', value: 'sourceAddress' },
-          { text: 'Destination Address', value: 'destAddress' },
-          { text: 'Status', value: 'status' },
-          { text: 'Vehicle Number', value: 'vehicleNumber' },
-          { text: 'Actions', value: 'actions', width: '10%' },
+          { text: 'Distance', value: 'distance', sortable: false },
+          { text: 'Generation Time', value: 'generationTime', sortable: false },
+          { text: 'Source Address', value: 'sourceAddress', sortable: false },
+          { text: 'Destination Address', value: 'destAddress', sortable: false },
+          { text: 'Status', value: 'status', sortable: false },
+          { text: 'Vehicle Number', value: 'vehicleNumber', sortable: false },
+          { text: 'Actions', value: 'actions', width: '10%', sortable: false },
         ],  
       }
     },
     async created(){
+        this.loadingScreen = true
         const response = await getAllEwaybills();
+        this.loadingScreen = false;
         this.ewaybills = response;
         console.log(this.ewaybills);
 
@@ -125,11 +127,12 @@
     methods: {
       async changeStatus(){
         this.deliveryDatePayload.deliveredTime = this.deliveryDate
-        const response = await updateEwaybill(this.deliveryDatePayload)
+        await updateEwaybill(this.deliveryDatePayload)
+        this.loadingScreen = true;
         this.$nextTick(async () => {
           this.ewaybills = await getAllEwaybills();
         });
-        console.log(response)
+        this.loadingScreen = false
         this.dialog = false
         this.deliveryModal = false
         
@@ -180,9 +183,16 @@
 </script>
 
 
-<style scoped>
+<style>
   .text-primary{
     background-color: black;
+  }
+  .v-select{
+    /* padding-top: 0px; */
+    width: 120px;
+    border:none;
+    padding-top: 2px;
+    padding-bottom: 2px;
   }
 
 

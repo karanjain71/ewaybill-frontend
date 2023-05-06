@@ -5,8 +5,19 @@ const axiosApi = axios.create({
 })
 
 
-const token = localStorage.getItem("token")
 axiosApi.defaults.headers.common["Content-Type"] = "application/json"
-axiosApi.defaults.headers.common["Authorization"] = "Bearer " + token
+
+axiosApi.interceptors.request.use(
+  config => {
+    console.log(config + " is the config here")
+      if(config.addToken === true)
+      {
+        let token = localStorage.getItem("ewaybillToken")
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+  },
+  error => Promise.reject(error)
+);
 
 export default axiosApi;

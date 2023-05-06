@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import notifications from './notifications'
-import userDetails from './userDetails'
+import userDetails from './userData'
 
 Vue.use(Vuex);
 
