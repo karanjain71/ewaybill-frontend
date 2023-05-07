@@ -11,11 +11,13 @@
                         <v-col>
                             <v-file-input
                             v-model="file"
+                            required
                             chips
                             label="Upload ewaybill"
                             outlined
                             dense
                             placeholder="Select your files"
+                            :rules="pdfRules"
                             :show-size="1000"
                             ></v-file-input>
                         </v-col>
@@ -23,8 +25,8 @@
                     <v-row>
                         <v-btn
                             class="v-btn-submit"
-                            @click="uploadEwaybillPdf"
                             color="primary"
+                            @click="uploadEwaybillPdf"
                         >
                             Submit
                         </v-btn>
@@ -195,6 +197,9 @@
       party_name: "",
       file: [],
       nowDate: new Date().toISOString().slice(0,10),
+      pdfRules: [
+        v => !!v || 'Ewaybill is required'
+      ],
       nameRules: [
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
@@ -246,10 +251,13 @@
 
         },
         async uploadEwaybillPdf(){
-            const response = await postCreateEwaybillPdf(this.file);
-            this.$refs.pdfForm.reset()
-            console.log(response)
-            console.log(this.file + " here")
+            if(this.$refs.pdfForm.validate() && this.file!=""){
+                await postCreateEwaybillPdf(this.file);
+                this.$refs.pdfForm.reset()
+            }
+            else{
+                store.dispatch('notifications/setNotificationsList', {text: 'Please upload ewaybill before submitting form',color: 'red'})
+            }
         },
         clearAttachment(){
             this.file = []

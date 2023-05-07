@@ -1,7 +1,7 @@
 <template>
   <v-progress-circular model-value="20" v-if="apiLoading"></v-progress-circular>
   <loading-screen v-else-if="loadingScreen"></loading-screen>
-  <v-card v-else>
+  <v-card v-else class="mx-5 mt-5">
     <v-card-title>
       Ewaybills
       <v-spacer></v-spacer>
@@ -45,34 +45,35 @@
     </v-data-table>
     <v-dialog
         v-model="dialog"
-        width="auto"
+        max-width="500"
       >
         <v-card>
-          <v-card-title class="text-h5">
+          <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
             {{dialogMsg}}
           </v-card-title>
-          <v-form v-if="deliveryModal" class="mx-3">
-            <p>Enter delivery Date</p>
-            <v-date-picker v-model="deliveryDate" :max="nowDate"
+          <v-form v-if="deliveryModal" class="mx-9 mt-3">
+            <v-date-picker full-width v-model="deliveryDate" :max="nowDate"
             show-adjacent-months
             ></v-date-picker>
           </v-form>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              color="green-darken-1"
-              variant="text"
-              style="margin: 0 4px 8px 3px;"
+              text="true"
+              color="primary"
+              elevation="0"
+              class="ml-3 mr-4 mb-8 mt-7"
+              outlined
               @click="closeDialog()"
             >
-              No
+              Cancel
             </v-btn>
             <v-btn
-              variant="text"
+              class="v-btn-submit mr-6"
+              color="primary"
               @click="deliveryModal?changeStatus():confirmDeleteItem()"
-              class="v-btn-submit"
             >
-              Yes
+              Continue
             </v-btn>
           </v-card-actions>
         </v-card>

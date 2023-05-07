@@ -158,3 +158,39 @@ export const deleteEwaybillItem = async (id) => {
     console.log(err)
   })
 }
+
+
+export const getUserDetails = async () => {
+
+  return axiosApi.get(url.GET_USER, {addToken: true})
+  .then(response => {
+    console.log(JSON.stringify(response) + "printing here")
+    console.log(response.status + "printing here 2")
+    if(response.status>=200 && response.status<=299){
+      console.log(response.status + " here ")
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: 'Unable to fetch user profile',color: 'red'})
+    console.log(err)
+  })
+}
+export const updateUserDetails = async (payload) => {
+
+  return axiosApi.put(url.UPDATE_USER, payload, {addToken: true})
+  .then(response => {
+    console.log(JSON.stringify(response) + "printing here")
+    console.log(response.status + "printing here 2")
+    if(response.status>=200 && response.status<=299){
+      console.log(response.status + " here ")
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: 'Unable to update user profile',color: 'red'})
+    console.log(err)
+  })
+}

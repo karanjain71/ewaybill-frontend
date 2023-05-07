@@ -1,6 +1,6 @@
 <template>
   <loading-screen v-if="loadingScreen"></loading-screen>
-  <v-card v-else class="card-design">
+  <v-card v-else class="card-design mx-5 mt-5" >
     <v-card-title >
       Archived Ewaybills
       <v-spacer></v-spacer>
@@ -99,36 +99,36 @@
   .card-design{
     padding-bottom: 20px;
   }
-  .v-data-table-header[data-v-a2123d40]{
-    background-color: black;
-  }
-  th{
-    /* background-color: red; */
-  }
-  .header{
-    background-color: #F8FBFC;
-    color: #80868A;
-    /* color: red; */
-  }
-  ::v-deep .v-data-table-header {
-    background-color: #EDF0F4;
-    border-radius: 100px;
-  }
-  ::v-deep .v-data-table {
-    border: 2px solid #EDF0F4;
-    margin: 10px;
-    // margin-bottom: 30px;
-    border-radius: 100px;
-  }
-  ::v-deep .v-data-footer {
-    margin-bottom: 10px;
-    border-radius: 100px;
-    // margin-bottom: 30px;
-  }
-  ::v-deep .v-data-table-body {
-    tr{
-      padding: 10px 0;
-    }
-  }
+  // .v-data-table-header[data-v-a2123d40]{
+  //   background-color: black;
+  // }
+  // th{
+  //   /* background-color: red; */
+  // }
+  // .header{
+  //   background-color: #F8FBFC;
+  //   color: #80868A;
+  //   /* color: red; */
+  // }
+  // ::v-deep .v-data-table-header {
+  //   background-color: #EDF0F4;
+  //   border-radius: 100px;
+  // }
+  // ::v-deep .v-data-table {
+  //   border: 2px solid #EDF0F4;
+  //   margin: 10px;
+  //   // margin-bottom: 30px;
+  //   border-radius: 100px;
+  // }
+  // ::v-deep .v-data-footer {
+  //   margin-bottom: 10px;
+  //   border-radius: 100px;
+  //   // margin-bottom: 30px;
+  // }
+  // ::v-deep .v-data-table-body {
+  //   tr{
+  //     padding: 10px 0;
+  //   }
+  // }
 
 </style>

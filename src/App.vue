@@ -12,7 +12,8 @@
         timeout="3500"
         v-model="snackbar.text"
         right
-        :style="`bottom: ${(index * 80) + 8}px`"
+        top
+        :style="`top: ${(index * 80) + 8}px;`"
       >
         <v-layout class="pr-4" :style="{borderLeft: `5px solid ${snackbar.color}`}">
           <v-icon :style="{ color: snackbar.color}" class="pl-2 pr-3" dark>{{snackbar.icon}}</v-icon>
@@ -101,7 +102,7 @@ created() {
   }
   .v-btn-submit{
         box-shadow: none !important;
-        margin: 0 4px 8px 3px;
+        margin: 0 4px 8px 3px !important;
         background-color: #3281D5 !important;
         color: white !important
   }
