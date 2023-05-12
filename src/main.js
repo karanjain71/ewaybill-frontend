@@ -9,6 +9,13 @@ import '@/assets/scss/theme.scss'
 Vue.config.productionTip = false
 Vue.config.devtools = true
 
+console.log(process.env.NODE_ENV)
+if(process.env.NODE_ENV === 'localhost'){
+  console.log("inside localhost")
+  const {worker} = require('./mocks')
+  worker.start()
+}
+
 new Vue({
   vuetify,
   router,

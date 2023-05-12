@@ -50,6 +50,7 @@
               class="mx-9 mt-2 pt-3"
               type="text" 
               v-model="email"
+              disabled
               outlined
               >
 
@@ -115,13 +116,13 @@
 
             </v-text-field>
           </v-form>
-          <v-card-actions>
+          <v-card-actions v-if="dialogFieldName!='email'">
             <v-spacer></v-spacer>
             <v-btn
               text="true"
               color="primary"
               elevation="0"
-              class="ml-3 mr-4 mb-8 mt-7"
+              class="ml-3 mr-4 mb-8 mt-6"
               outlined
               @click="closeDialog()"
             >

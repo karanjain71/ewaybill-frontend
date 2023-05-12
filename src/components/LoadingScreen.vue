@@ -1,9 +1,9 @@
 <template>
   <v-skeleton-loader
-    class="mx-auto"
+    class="mx-8"
     elevation="24"
-    max-width="1100"
-    height="600"
+    max-width="7000"
+    height="700"
     loading-text="Loading data..."
     type="table-heading, table"
   ></v-skeleton-loader>
