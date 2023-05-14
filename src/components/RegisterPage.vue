@@ -45,6 +45,14 @@
           </v-row>
           <v-row>
             <v-text-field
+              v-model="phoneNumber"
+              outlined
+              label="Phone Number"
+              required
+            ></v-text-field>
+          </v-row>
+          <v-row>
+            <v-text-field
               v-model="about"
               outlined
               label="About"
@@ -58,15 +66,10 @@
               block
               elevation="0"
               color="primary"
+              :loading="apiLoading"
             >
               Register
             </v-btn>
-            <!-- <v-btn
-              class="mr-4"
-              @click="registerWithGoogle"
-            >
-              Register with Google
-            </v-btn> -->
           </v-row>
           <v-row align="center" justify="center" class="my-3">
             <p class="mt-8" style="font-weight:bold" >Already a member? Log in <span style="color:blue; font-weight: bold">
@@ -89,12 +92,15 @@
       name: "",
       email: "",
       password: "",
+      phoneNumber: "",
       about: "",
-      form: {}
+      form: {},
+      apiLoading: false
     }),
 
     methods: {
       async submit () {
+        this.apiLoading = true
         const payload = {
           "name": this.name,
           "email": this.email,
@@ -102,6 +108,7 @@
           "about": this.about
         }
         const response = await postRegister(payload)
+        this.apiLoading = false
         console.log(response)
       },
       clear () {

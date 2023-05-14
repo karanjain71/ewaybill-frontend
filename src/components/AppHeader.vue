@@ -5,6 +5,7 @@
       v-model="drawer"
       app
       dark
+      mobile-breakpoint="760"
       style="backgroundColor: #000022"
       >
       <v-list-item class="">
@@ -51,7 +52,7 @@
       </v-list>
     </v-navigation-drawer>
       <v-app-bar class="flex-grow-0" app>
-        <v-app-bar-nav-icon @click.stop="(mini) = !mini"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click.stop="closeDrawer"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-menu offset-y rounded="lg" nudge-bottom="12" nudge-left="5">
           <template v-slot:activator="{on, attrs}">
@@ -122,6 +123,28 @@ export default {
     },
     redirectToProfile(){
       this.$router.push({path: '/profile'})
+    },
+    isMobile() {
+        if( window.innerWidth <= 760 ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    },
+    closeDrawer(){
+      console.log("is it getting called")
+      console.log(this.isMobile(), window.innerWidth)
+      if(this.isMobile()){
+        console.log("coming here buddy")
+        this.mini = false
+        this.drawer = !this.drawer
+      }
+      else{
+        this.drawer = true
+        this.mini = !this.mini
+        console.log(this.drawer, this.mini, "coming here")
+      }
     }
   }
 };
@@ -140,4 +163,7 @@ export default {
     border-radius: 4px;
     background: rgba(10, 204, 117, 0.19)
   }
+  .v-navigation-drawer--close.v-navigation-drawer--temporary {
+    transform: translateX(-13vw) !important;
+}
 </style>

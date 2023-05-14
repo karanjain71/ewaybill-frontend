@@ -81,7 +81,6 @@
         this.loadingScreen = true;
         const response = await getArchivedEwaybills();
         this.ewaybills = response
-        console.log(this.loading + " is the loading")
         this.loadingScreen = false
 
     },

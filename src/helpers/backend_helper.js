@@ -29,7 +29,7 @@ export const postRegister = async (payload) => {
   return axiosApi.post(url.POST_REGISTER, payload,{addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
-      store.dispatch('notifications/setNotificationsList', {text: 'User registered successfully',color: 'green'})
+      store.dispatch('notifications/setNotificationsList', {text: 'User registered successfully. Please login to continue',color: 'green'})
       return response.data
     }
     throw response.data
@@ -192,5 +192,35 @@ export const updateUserDetails = async (payload) => {
   .catch(err => {
     store.dispatch('notifications/setNotificationsList', {text: 'Unable to update user profile',color: 'red'})
     console.log(err)
+  })
+}
+
+export const updateEmailTiming = async (payload) => {
+  console.log(payload)
+  return axiosApi.put(url.UPDATE_EMAIL_TIMING, payload, {addToken: true})
+  .then(response => {
+    if(response.status>=200 && response.status<=299){
+      return response.data
+    }
+    throw response.data
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: 'Unable to update email timing for the day',color: 'red'})
+    console.log(err)
+  })
+}
+
+export const resetUserPassword = async (payload) => {
+  return axiosApi.post(url.RESET_PASSWORD, payload, {addToken: true})
+  .then(response => {
+    if(response.status>=200 && response.status<=299){
+      store.dispatch('notifications/setNotificationsList', {text: response.data.msg,color: 'green'})
+      return response.data.success
+    }
+    throw response.data.success
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: err.response.data.msg,color: 'red'})
+    return err.response.data.success;
   })
 }

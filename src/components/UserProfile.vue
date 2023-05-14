@@ -89,31 +89,47 @@
               v-if="dialogFieldName=='password'"
               label="Current Password"
               class="mx-9 mt-2 pt-3"
-              type="text" 
               v-model="currentPassword"
               outlined
-              >
-
+              :type="showCurrentPassword ? 'text' : 'password'"
+            >
+            
+              <template v-slot:append v-if="!showCurrentPassword"  >
+                <v-icon @click="showCurrentPassword=!showCurrentPassword">mdi-eye</v-icon>
+              </template>
+              <template v-slot:append v-else>
+                <v-icon color="primary" @click="showCurrentPassword=!showCurrentPassword">mdi-eye</v-icon>
+              </template>
             </v-text-field>
             <v-text-field
               v-if="dialogFieldName=='password'"
               label="New Password"
               class="mx-9  pt-3"
-              type="text" 
               v-model="newPassword"
               outlined
-              >
-
+              :type="showNewPassword ? 'text' : 'password'"
+            >
+              <template v-slot:append v-if="!showNewPassword"  >
+                <v-icon @click="showNewPassword=!showNewPassword">mdi-eye</v-icon>
+              </template>
+              <template v-slot:append v-else>
+                <v-icon color="primary" @click="showNewPassword=!showNewPassword">mdi-eye</v-icon>
+              </template>
             </v-text-field>
             <v-text-field
               v-if="dialogFieldName=='password'"
               label="Confirm Password"
               class="mx-9 pt-3"
-              type="text" 
               v-model="confirmPassword"
               outlined
-              >
-
+              :type="showConfirmPassword ? 'text' : 'password'"
+            >
+              <template v-slot:append v-if="!showConfirmPassword"  >
+                <v-icon @click="showConfirmPassword=!showConfirmPassword">mdi-eye</v-icon>
+              </template>
+              <template v-slot:append v-else>
+                <v-icon color="primary" @click="showConfirmPassword=!showConfirmPassword">mdi-eye</v-icon>
+              </template>
             </v-text-field>
           </v-form>
           <v-card-actions v-if="dialogFieldName!='email'">
@@ -124,6 +140,7 @@
               elevation="0"
               class="ml-3 mr-4 mb-8 mt-6"
               outlined
+              :loading="apiLoading"
               @click="closeDialog()"
             >
               Cancel
@@ -131,7 +148,8 @@
             <v-btn
               class="v-btn-submit mr-6"
               color="primary"
-              @click="updateAccountDetails()"
+              :loading="apiLoading"
+              @click="dialogFieldName=='password'?resetPassword():updateAccountDetails()"
             >
               Continue
             </v-btn>
@@ -145,7 +163,7 @@
 <script>
 
 import store from '@/store'
-import { getUserDetails, updateUserDetails } from '@/helpers'
+import { getUserDetails, updateUserDetails, resetUserPassword } from '@/helpers'
 import LoadingScreen from './LoadingScreen.vue';
 
 export default {
@@ -175,6 +193,10 @@ export default {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
+      showCurrentPassword: false,
+      showNewPassword: false,
+      showConfirmPassword: false,
+      apiLoading: false
 
   }),
   async created() {
@@ -220,6 +242,7 @@ export default {
       this.dialog = false
     },
     async updateAccountDetails(){
+      this.apiLoading = true
       const response = await updateUserDetails({
         "email": this.email,
         "name": this.name,
@@ -227,8 +250,10 @@ export default {
         "phoneNumber": this.phoneNumber
       })
       console.log(response)
+      this.apiLoading = false
       this.dialog = false
-      this.fetchUserDetails()
+
+      // this.fetchUserDetails()
       store.dispatch('notifications/setNotificationsList', {text: 'Updated User Data Successfully',color: 'green'})
 
     },
@@ -251,6 +276,21 @@ export default {
       this.phoneNumber = response?.phoneNumber
       
       this.loadingScreen = false;
+    },
+    async resetPassword(){
+      this.apiLoading = true;
+      const response = await resetUserPassword({
+        "currentPassword": this.currentPassword,
+        "newPassword": this.newPassword
+      })
+      this.apiLoading = false;
+      if(response==true){
+        this.dialog = false
+        this.currentPassword = ""
+        this.newPassword = ""
+        this.confirmPassword = ""
+      }
+      console.log(response + "printing response here")
     }
   }
       

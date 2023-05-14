@@ -20,6 +20,7 @@
       :items="ewaybills"
       :search="search"
       show-select
+      mobile-breakpoint="0"
     >
       <template v-slot:[`item.status`]="{ item }">
         <v-select outlined variant="solo" class="pa-0 mt-7 v-select"
@@ -78,12 +79,51 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog
+        v-model="showTimerModal"
+        max-width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
+            Set time for daily emails
+          </v-card-title>
+            <v-form v-if="showTimerModal" class="mx-9 mt-3">
+              <v-time-picker
+                v-model="emailTiming"
+                full-width
+                :allowed-minutes="allowedMinutes"
+                ampm-in-title
+                format="ampm"
+              ></v-time-picker>
+            </v-form>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text="true"
+              color="primary"
+              elevation="0"
+              class="ml-3 mr-4 mb-8 mt-7"
+              outlined
+              @click="closeTimerModal"
+            >
+              Cancel
+            </v-btn>
+            <v-btn
+              class="v-btn-submit mr-6"
+              color="primary"
+              @click="setTimerModalTime"
+            >
+              Continue
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
   </v-card>
   
 </template>
 
 <script>
-  import {getAllEwaybills, updateEwaybill, deleteEwaybillItem} from "../helpers/backend_helper"
+  import {getAllEwaybills, updateEwaybill, deleteEwaybillItem, updateEmailTiming} from "../helpers/backend_helper"
 import LoadingScreen from './LoadingScreen.vue';
 
   export default {
@@ -105,6 +145,9 @@ import LoadingScreen from './LoadingScreen.vue';
         selectedStatus: "",
         toBeDeleted: 0,
         search: '',
+        showTimerModal: false,
+        emailTiming: "10:00",
+        allowedMinutes: [],
         headers: [
           { text: 'Number', align: 'start', sortable: false, value: 'ewaybillNumber' },
           { text: 'Distance', value: 'distance', sortable: false },
@@ -120,6 +163,10 @@ import LoadingScreen from './LoadingScreen.vue';
     async created(){
         this.loadingScreen = true
         const response = await getAllEwaybills();
+        this.showTimerModal = false
+        if(response?.ifEmailTimeSet===false){
+          this.showTimerModal = true
+        }
         this.loadingScreen = false;
         this.ewaybills = response;
         console.log(this.ewaybills);
@@ -142,6 +189,16 @@ import LoadingScreen from './LoadingScreen.vue';
         this.dialog = false
         this.deliveryModal = false
       },  
+      closeTimerModal(){
+        this.showTimerModal = false
+      },
+      async setTimerModalTime(){
+        console.log(this.emailTiming)
+        await updateEmailTiming({
+          emailTime: this.emailTiming
+        })
+        this.showTimerModal = false
+      },
       openDeliveryModal(payload){
         if(payload.status === "Delivered"){
           this.dialogMsg = "Please enter delivery date"

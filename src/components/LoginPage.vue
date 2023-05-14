@@ -42,6 +42,7 @@
               block
               elevation="0"
               color="primary"
+              :loading="apiLoading"
             >
               Log in
             </v-btn>
@@ -78,11 +79,13 @@ import router from '@/router'
       email: "jainkaran049@gmail.com",
       password: "12345",
       rememberMe: false,
-      show: false
+      show: false,
+      apiLoading: false
     }),
 
     methods: {
        async loginUser () {
+        this.apiLoading = true
         const response = await postLogin(this.email, this.password)
         console.log("logging with" + this.email)
         console.log(response + " printing response")
