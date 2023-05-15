@@ -16,6 +16,7 @@
               outlined
               label="Email"
               required
+              dense
             ></v-text-field>
           </v-row>
           <v-row>
@@ -24,6 +25,7 @@
               outlined
               label="Password"
               required
+              dense
               :type="show ? 'text' : 'password'"
             >
             
@@ -88,6 +90,7 @@ import router from '@/router'
         this.apiLoading = true
         const response = await postLogin(this.email, this.password)
         console.log("logging with" + this.email)
+        this.apiLoading = false
         console.log(response + " printing response")
         localStorage.setItem('ewaybillToken', response.token);
         store.dispatch("userDetails/setUserDetailsAction", {email:this.email})

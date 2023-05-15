@@ -3,7 +3,7 @@
   <loading-screen v-else-if="loadingScreen"></loading-screen>
   <v-card v-else
     rounded
-    class="mx-auto my-5"
+    class="mx-auto my-4 rounded-lg"
     max-width="1150"
     elevation="0"
     outlined
@@ -16,7 +16,7 @@
         v-model="selectedItem"
         color="primary"
       >
-      <template v-for="(item) in items">
+      <template v-for="(item, index) in items">
 
           <v-list-item :key="item.text" two-line @click="openDialog(item)">
             <v-list-item-icon class="py-7">
@@ -24,7 +24,8 @@
             </v-list-item-icon>
             <v-list-item-content class="flexing">
               <v-list-item-title>{{item.text}} </v-list-item-title>
-              <v-list-item-title class="mr-8">{{item.value}}</v-list-item-title>
+              <v-list-item-title class="mr-8" v-if="item.id!=='password'">{{userDetails[item.id]}}</v-list-item-title>
+              <v-list-item-title class="mr-8" v-else>********</v-list-item-title>
             </v-list-item-content>
             <v-list-item-icon class="py-7">
               <v-icon>{{item.endIcon}}</v-icon>
@@ -49,8 +50,9 @@
               label="Update Email"
               class="mx-9 mt-2 pt-3"
               type="text" 
-              v-model="email"
+              v-model="userDetails.email"
               disabled
+              dense
               outlined
               >
 
@@ -60,7 +62,8 @@
               label="Update Name" 
               class="mx-9 mt-2 pt-3"
               type="text" 
-              v-model="name"
+              v-model="userDetails.name"
+              dense
               outlined
               >
 
@@ -70,7 +73,8 @@
               label="Additional Email"
               class="mx-9 mt-2 pt-3"
               type="text" 
-              v-model="additionalEmail"
+              v-model="userDetails.additionalEmail"
+              dense
               outlined
               >
 
@@ -80,7 +84,9 @@
               label="Phone Number"
               class="mx-9 mt-2 pt-3"
               type="number" 
-              v-model="phoneNumber"
+              prefix="+91"
+              v-model="userDetails.phoneNumber"
+              dense
               outlined
               >
 
@@ -91,6 +97,7 @@
               class="mx-9 mt-2 pt-3"
               v-model="currentPassword"
               outlined
+              dense
               :type="showCurrentPassword ? 'text' : 'password'"
             >
             
@@ -107,6 +114,7 @@
               class="mx-9  pt-3"
               v-model="newPassword"
               outlined
+              dense
               :type="showNewPassword ? 'text' : 'password'"
             >
               <template v-slot:append v-if="!showNewPassword"  >
@@ -122,6 +130,7 @@
               class="mx-9 pt-3"
               v-model="confirmPassword"
               outlined
+              dense
               :type="showConfirmPassword ? 'text' : 'password'"
             >
               <template v-slot:append v-if="!showConfirmPassword"  >
@@ -140,6 +149,7 @@
               elevation="0"
               class="ml-3 mr-4 mb-8 mt-6"
               outlined
+              dense
               :loading="apiLoading"
               @click="closeDialog()"
             >
@@ -163,25 +173,23 @@
 <script>
 
 import store from '@/store'
-import { getUserDetails, updateUserDetails, resetUserPassword } from '@/helpers'
+import { updateUserDetails, resetUserPassword } from '@/helpers'
 import LoadingScreen from './LoadingScreen.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: { LoadingScreen },
   name: 'UserProfile',
   data: () => ({
        items: [
-        { id: "name", text: 'Name', value: 'Karan Jain', icon: 'mdi-account-outline', endIcon: 'mdi-chevron-right' },
-        { id: "phoneNumber", text: 'Phone Number', value: '+91 9748495951', icon: 'mdi-phone', endIcon: 'mdi-chevron-right' },
-        { id: "email", text: 'Email Address', value: 'karanjain71@gmail.com', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
-        { id: "password", text: 'Password', value: '"&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;"', icon: 'mdi-lock', endIcon: 'mdi-chevron-right' },
-        { id: "additionalEmail", text: 'Additional Email', value: 'acadeepak141@gmail.com', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
+        { id: "name", text: 'Name', icon: 'mdi-account-outline', endIcon: 'mdi-chevron-right' },
+        { id: "phoneNumber", text: 'Phone Number', icon: 'mdi-phone', endIcon: 'mdi-chevron-right' },
+        { id: "email", text: 'Email Address', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
+        { id: "password", text: 'Password', icon: 'mdi-lock', endIcon: 'mdi-chevron-right' },
+        { id: "additionalEmail", text: 'Additional Email', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
       ],
       dialog: false,
-      email: "",
-      additionalEmail: "",
       phoneNumber: "",
-      name: "",
       password: "",
       updatedValue: "",
       dialogTitle: "",
@@ -196,7 +204,7 @@ export default {
       showCurrentPassword: false,
       showNewPassword: false,
       showConfirmPassword: false,
-      apiLoading: false
+      apiLoading: false,
 
   }),
   async created() {
@@ -207,9 +215,13 @@ export default {
     snackbars(){
       return store.getters["notifications/getNotificationsList"]
     },
+    ...mapGetters({
+      userDetails: "userDetails/getUserDetails"
+    })
   },
   methods:{
     openDialog(item){
+
       if(item.id=="email"){
         this.dialogTitle = "Change Your Email"
         this.dialogFieldType = "text"
@@ -243,13 +255,12 @@ export default {
     },
     async updateAccountDetails(){
       this.apiLoading = true
-      const response = await updateUserDetails({
-        "email": this.email,
-        "name": this.name,
-        "additionalEmail": this.additionalEmail,
-        "phoneNumber": this.phoneNumber
+      await updateUserDetails({
+        "email": this.userDetails.email,
+        "name": this.userDetails.name,
+        "additionalEmail": this.userDetails.additionalEmail,
+        "phoneNumber": this.userDetails.phoneNumber
       })
-      console.log(response)
       this.apiLoading = false
       this.dialog = false
 
@@ -259,38 +270,34 @@ export default {
     },
     async fetchUserDetails(){
       this.loadingScreen = true
-      const response = await getUserDetails();
-      this.items2 = this.items.map(item=>{
-        if(item.id=="password"){
-          item.value = `********`
-        }
-        else{
-          item.value = response[`${item.id}`]
-        }
-        console.log(item)
-        return item
-      })
-      this.email = response?.email
-      this.name = response?.name
-      this.additionalEmail = response?.additionalEmail
-      this.phoneNumber = response?.phoneNumber
+      // const response = await getUserDetails();
+      // this.password = `********`
+      // this.email = response?.email
+      // this.name = response?.name
+      // this.additionalEmail = response?.additionalEmail
+      // this.phoneNumber = response?.phoneNumber
       
       this.loadingScreen = false;
     },
     async resetPassword(){
-      this.apiLoading = true;
-      const response = await resetUserPassword({
-        "currentPassword": this.currentPassword,
-        "newPassword": this.newPassword
-      })
-      this.apiLoading = false;
-      if(response==true){
-        this.dialog = false
-        this.currentPassword = ""
-        this.newPassword = ""
-        this.confirmPassword = ""
+      if(this.confirmPassword === this.newPassword){
+        this.apiLoading = true;
+        const response = await resetUserPassword({
+          "currentPassword": this.currentPassword,
+          "newPassword": this.newPassword
+        })
+        this.apiLoading = false;
+        if(response==true){
+          this.dialog = false
+          this.currentPassword = ""
+          this.newPassword = ""
+          this.confirmPassword = ""
+        }
       }
-      console.log(response + "printing response here")
+      else{
+        store.dispatch('notifications/setNotificationsList', {text: 'New Password and Confirm Password field values are different',color: 'red'})
+      }
+      
     }
   }
       

@@ -1,7 +1,12 @@
 export default function() {
     return {
         userDetails: {
-            email: ""
+            name: "",
+            email: "",
+            phoneNumber: "",
+            additionalEmail: "",
+            emailTime: "",
+            ifEmailTimeSet: false,
         }, 
     };
 }

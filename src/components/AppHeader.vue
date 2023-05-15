@@ -51,7 +51,7 @@
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
-      <v-app-bar class="flex-grow-0" app>
+      <v-app-bar class="flex-grow-0" app color="#fff" elevation="false">
         <v-app-bar-nav-icon @click.stop="closeDrawer"></v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <v-menu offset-y rounded="lg" nudge-bottom="12" nudge-left="5">
@@ -67,7 +67,7 @@
           <v-list background-color="#3281D5">
             <v-list-item>
               <v-list-item-title class="ml-2 bg-primary">
-                  karanjain71@gmail.com
+                  {{userDetails.email}}
               </v-list-item-title>
             </v-list-item>
             <v-list-item @click="redirectToProfile">
@@ -115,6 +115,9 @@ export default {
     ...mapGetters({
       userDetails: "userDetails/getUserDetails"
     })
+  },
+  created(){
+
   },
   methods: {
     logoutUser(){

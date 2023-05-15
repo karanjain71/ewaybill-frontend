@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto mt-10 px-4 py-4" max-width="500" max-height="600" elevation="4">
+    <v-card class="mx-auto mt-10 px-4 py-4" max-width="500" max-height="600">
         <v-card-title >
             Coming Soon...
         </v-card-title>

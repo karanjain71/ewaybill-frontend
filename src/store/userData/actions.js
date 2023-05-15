@@ -1,5 +1,6 @@
+import { getUserDetails } from "./../../helpers/backend_helper";
 
-export async function setUserDetailsAction({commit}, userDetails) {
-    console.log(JSON.stringify(userDetails) + " here user details")
+export async function setUserDetailsAction({commit}) {
+    const userDetails = await getUserDetails()
     commit('setUserDetails', userDetails);      
 }

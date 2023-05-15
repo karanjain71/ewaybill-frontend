@@ -1,6 +1,4 @@
 import * as url from './url_helper'
-// import axiosApi from "./api_helper"
-// import store from '@/store'
 import axiosApi from './api_helper'
 import store from './../store/index'
 
@@ -9,7 +7,6 @@ export const postLogin = async (email, password) => {
     "email": email,
     "password": password
   }
-  console.log(payload, url.POST_LOGIN, " payload")
   return axiosApi.post(url.POST_LOGIN, payload, {addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
@@ -30,13 +27,13 @@ export const postRegister = async (payload) => {
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
       store.dispatch('notifications/setNotificationsList', {text: 'User registered successfully. Please login to continue',color: 'green'})
-      return response.data
+      return true
     }
-    throw response.data
+    return false
   })
   .catch(err=> {
-    store.dispatch('notifications/setNotificationsList', {text: 'Error while registering user. Please retry',color: 'red'})
-    console.log(err)
+    store.dispatch('notifications/setNotificationsList', {text: err.response.data.msg,color: 'red'})
+    return err.response.data.success
   })
 }
 
@@ -72,7 +69,6 @@ export const postCreateEwaybill = async (payload) => {
 
 
 export const postCreateEwaybillPdf = async (payload) => {
-  console.log(payload, "coming ehre with paylaod")
   return axiosApi.post(url.POST_CREATE_EWAYBILL_PDF, {
     "file": payload
   },{headers: {
@@ -123,7 +119,6 @@ export const getArchivedEwaybills = async () => {
 }
 
 export const updateEwaybill = async (payload) => {
-  console.log(JSON.stringify(payload) + " is coming here")
   return axiosApi.put(url.UPDATE_EWAYBILL + `/${payload.id}`, payload, {addToken: true})
   .then(response => {
     console.log(response + " is the respone")
@@ -144,10 +139,7 @@ export const deleteEwaybillItem = async (id) => {
 
   return axiosApi.delete(url.DELETE_EWAYBILL + `/${id}`, {addToken: true})
   .then(response => {
-    console.log(JSON.stringify(response) + "printing here")
-    console.log(response.status + "printing here 2")
     if(response.status>=200 && response.status<=299){
-      console.log(response.status + " here ")
       store.dispatch('notifications/setNotificationsList', {text: 'Ewaybill Deleted Successfully',color: 'green'})
       return response.data
     }
@@ -164,10 +156,7 @@ export const getUserDetails = async () => {
 
   return axiosApi.get(url.GET_USER, {addToken: true})
   .then(response => {
-    console.log(JSON.stringify(response) + "printing here")
-    console.log(response.status + "printing here 2")
     if(response.status>=200 && response.status<=299){
-      console.log(response.status + " here ")
       return response.data
     }
     throw response.data
@@ -181,10 +170,7 @@ export const updateUserDetails = async (payload) => {
 
   return axiosApi.put(url.UPDATE_USER, payload, {addToken: true})
   .then(response => {
-    console.log(JSON.stringify(response) + "printing here")
-    console.log(response.status + "printing here 2")
     if(response.status>=200 && response.status<=299){
-      console.log(response.status + " here ")
       return response.data
     }
     throw response.data

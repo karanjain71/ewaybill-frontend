@@ -1,7 +1,7 @@
 <template>
   <v-progress-circular model-value="20" v-if="apiLoading"></v-progress-circular>
   <loading-screen v-else-if="loadingScreen"></loading-screen>
-  <v-card v-else class="mx-5 mt-5">
+  <v-card v-else class="mx-2 mt-5 rounded-lg" outlined >
     <v-card-title>
       Ewaybills
       <v-spacer></v-spacer>
@@ -12,7 +12,9 @@
         single-line
         hide-details
         outlined
+        dense
         no-data-text="No data available"
+        clearable
       ></v-text-field>
     </v-card-title>
     <v-data-table
@@ -20,15 +22,17 @@
       :items="ewaybills"
       :search="search"
       show-select
+      dense
       mobile-breakpoint="0"
     >
       <template v-slot:[`item.status`]="{ item }">
         <v-select outlined variant="solo" class="pa-0 mt-7 v-select"
         v-model= "item.status"
-        height="20px"
+        height="5px"
         :items="statusItems"
         :item-value="item.status"
         v-on:change="openDeliveryModal(item)"
+        dense
         aria-expanded="false"
         >
           {{ item.status }}
@@ -36,8 +40,8 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <div>
-        <v-icon color="#6E7478" class="mx-1" v-on:click="editEwaybill(item)">mdi-pencil</v-icon>
-        <v-icon color="#6E7478" v-on:click="deleteEwaybill(item)">mdi-delete</v-icon>
+        <v-icon color="#5F6367" class="mx-1" v-on:click="editEwaybill(item)">mdi-pencil</v-icon>
+        <v-icon color="#5F6367" v-on:click="deleteEwaybill(item)">mdi-delete</v-icon>
         </div>
       </template>
       <template v-slot:[`item.generationTime`]="{item}">
@@ -251,6 +255,9 @@ import LoadingScreen from './LoadingScreen.vue';
     border:none;
     padding-top: 2px;
     padding-bottom: 2px;
+  }
+  .border-solid{
+    border: 1px solid black;
   }
 
 

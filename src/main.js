@@ -10,9 +10,7 @@ import VueLogger from 'vuejs-logger';
 Vue.config.productionTip = false
 Vue.config.devtools = true
 
-console.log(process.env.NODE_ENV)
 if(process.env.NODE_ENV === 'production'){
-  console.log("coming here buddy")
   const {worker} = require('./mocks')
   worker.start()
 }

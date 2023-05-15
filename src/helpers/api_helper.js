@@ -9,7 +9,6 @@ axiosApi.defaults.headers.common["Content-Type"] = "application/json"
 
 axiosApi.interceptors.request.use(
   config => {
-    console.log(config + " is the config here")
       if(config.addToken === true)
       {
         let token = localStorage.getItem("ewaybillToken")

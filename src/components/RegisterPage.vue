@@ -16,6 +16,7 @@
               outlined
               label="Name"
               required
+              dense
             ></v-text-field>
           </v-row>
           <v-row>
@@ -24,6 +25,7 @@
               outlined
               label="Email"
               required
+              dense
             ></v-text-field>
           </v-row>
           <v-row>
@@ -32,6 +34,7 @@
               outlined
               label="Password"
               required
+              dense
               :type="show ? 'text' : 'password'"
             >
             
@@ -49,6 +52,8 @@
               outlined
               label="Phone Number"
               required
+              dense
+              prefix="+91"	
             ></v-text-field>
           </v-row>
           <v-row>
@@ -57,6 +62,7 @@
               outlined
               label="About"
               required
+              dense
             ></v-text-field>
           </v-row>
           <v-row>
@@ -109,13 +115,18 @@
         }
         const response = await postRegister(payload)
         this.apiLoading = false
-        console.log(response)
+        if(response == true){
+          console.log("clearing the fields")
+          this.clear()
+        }
       },
       clear () {
-        this.email = ''
-        this.password = ''
-        this.username = ''
-        this.about = ''
+        this.email = ""
+        this.password = ""
+        this.username = ""
+        this.about = ""
+        this.phoneNumber = ""
+        this.name = ""
       },
 
       loginPage(){

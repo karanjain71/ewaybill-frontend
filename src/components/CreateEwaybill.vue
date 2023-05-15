@@ -60,6 +60,7 @@
                         label="Ewaybill Number"
                         :rules="nameRules"
                         required
+                        dense
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -75,6 +76,7 @@
                         label="Distance"
                         :rules="distanceRules"
                         required
+                        dense
                         class="pa-0"
                     ></v-text-field>
                 </v-col>
@@ -90,6 +92,7 @@
                         outlined
                         label="Generation Time"
                         required
+                        dense
                         :rules="generationTimeRules"
                         :max="nowDate"
                     ></v-text-field>
@@ -106,6 +109,7 @@
                         outlined
                         label="Source Address"
                         required
+                        dense
                         :rules="sourceAddressRules"
                     ></v-text-field>
                 </v-col>
@@ -121,6 +125,7 @@
                         outlined
                         label="Destination Address"
                         required
+                        dense
                         :rules="destAddressRules"
                     ></v-text-field>
                 </v-col>
@@ -136,6 +141,7 @@
                         outlined
                         label="Party Name"
                         required
+                        dense
                         :rules="partyNameRules"
                     ></v-text-field>
                 </v-col>
@@ -151,6 +157,7 @@
                         outlined
                         label="Vehicle Number"
                         required
+                        dense
                         :rules="vehicleNumberRules"
                     ></v-text-field>
                 </v-col>

@@ -2,11 +2,11 @@
   <v-app v-if="this.$route.meta.layout=='AuthLayout'" class="main-styling">
     <app-header></app-header>
     <v-main
-      style="background-color: #F8F8FB;"
+      style="background-color: #F5F8FC;"
       class="mt-16 pt-2 ml-4"
     >
       <router-view/>
-      <v-snackbar auto-height color="white" multi-line="true"
+      <v-snackbar auto-height color="white" multi-line="true" max-width="400px"
         v-for="(snackbar, index) in snackbars.filter(s=>s.showing)"
         :key="snackbar.text + Math.random()"
         timeout="3500"
@@ -31,7 +31,8 @@
         </template>
       </v-snackbar>
     </v-main>
-    <v-footer class="bg-grey-lighten-1  ml-4 pt-8 pb-3" >
+    <v-divider inset/>
+    <v-footer class="ml-4 pt-3 pb-3" color="#F5F8FC">
       <v-row justify="center" no-gutters>
         <v-col class="text-center mt-4" cols="12">
           Copyright
@@ -46,13 +47,14 @@
           style="background-color: #F8F8FB;"
       >
         <router-view />
-        <v-snackbar auto-height color="white" multi-line="true"
+        <v-snackbar auto-height color="white" multi-line="true" max-width="400px"
         v-for="(snackbar, index) in snackbars.filter(s=>s.showing)"
         :key="snackbar.text + Math.random()"
         timeout="3500"
         v-model="snackbar.text"
         right
-        :style="`bottom: ${(index * 80) + 8}px`"
+        top
+        :style="`top: ${(index * 80) + 8}px;`"
       >
         <v-layout class="pr-4" :style="{borderLeft: `5px solid ${snackbar.color}`}">
           <v-icon :style="{ color: snackbar.color}" class="pl-2 pr-3" dark>{{snackbar.icon}}</v-icon>
@@ -88,7 +90,9 @@ computed: {
   })
 },
 created() {
-  this.$store.dispatch("userDetails/setUserDetailsAction", {})
+  if(localStorage.getItem("ewaybillToken")){
+    this.$store.dispatch("userDetails/setUserDetailsAction", {})
+  }
 }
 };
 </script>

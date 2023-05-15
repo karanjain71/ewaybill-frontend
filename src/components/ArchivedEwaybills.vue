@@ -1,6 +1,6 @@
 <template>
   <loading-screen v-if="loadingScreen"></loading-screen>
-  <v-card v-else class="card-design mx-5 mt-5" >
+  <v-card v-else class="card-design mx-5 mt-5 rounded-lg" outlined>
     <v-card-title >
       Archived Ewaybills
       <v-spacer></v-spacer>
@@ -11,7 +11,8 @@
         single-line
         hide-details
         outlined
-        height="10px"
+        dense
+        clearable
 
       ></v-text-field>
     </v-card-title>
@@ -21,6 +22,7 @@
       :items="ewaybills"
       :search="search"
       show-select
+      mobile-breakpoint="0"
     >
     <template v-slot:[`item.generationTime`]="{item}">
         {{new Date(item.generationTime).toLocaleDateString()}}
