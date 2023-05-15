@@ -42,11 +42,13 @@ export const postForgotPassword = async (payload) => {
   return axiosApi.post(url.POST_FORGOT_PASSWORD, payload, {addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
+      store.dispatch('notifications/setNotificationsList', {text: response.data.msg,color: 'green'})
       return response.data
     }
     throw response.data
   })
   .catch(err=> {
+    store.dispatch('notifications/setNotificationsList', {text: err.response.data.msg,color: 'red'})
     console.log(err)
   })
 }
@@ -198,6 +200,21 @@ export const updateEmailTiming = async (payload) => {
 
 export const resetUserPassword = async (payload) => {
   return axiosApi.post(url.RESET_PASSWORD, payload, {addToken: true})
+  .then(response => {
+    if(response.status>=200 && response.status<=299){
+      store.dispatch('notifications/setNotificationsList', {text: response.data.msg,color: 'green'})
+      return response.data.success
+    }
+    throw response.data.success
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: err.response.data.msg,color: 'red'})
+    return err.response.data.success;
+  })
+}
+
+export const resetUserPasswordLink = async (payload) => {
+  return axiosApi.post(url.RESET_PASSWORD_LINK, payload, {addToken: false})
   .then(response => {
     if(response.status>=200 && response.status<=299){
       store.dispatch('notifications/setNotificationsList', {text: response.data.msg,color: 'green'})

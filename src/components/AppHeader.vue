@@ -139,7 +139,6 @@ export default {
       console.log("is it getting called")
       console.log(this.isMobile(), window.innerWidth)
       if(this.isMobile()){
-        console.log("coming here buddy")
         this.mini = false
         this.drawer = !this.drawer
       }

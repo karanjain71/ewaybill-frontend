@@ -6,6 +6,8 @@ import DashboardPage from '../components/DashboardPage.vue';
 import CreateEwaybill from '../components/CreateEwaybill.vue';
 import ArchivedEwaybills from '../components/ArchivedEwaybills.vue';
 import UserProfile from '../components/UserProfile.vue';
+import ResetPassword from '../components/ResetPassword.vue';
+
 
 const routes = [
     {
@@ -70,6 +72,14 @@ const routes = [
             layout: 'NonAuthLayout',
         },
         component: ForgotPassword,
+    },
+    {
+        path: '/reset-password',
+        name: 'ResetPassword',
+        meta: {
+            layout: 'NonAuthLayout',
+        },
+        component: ResetPassword,
     },
     {
         path: '/*',

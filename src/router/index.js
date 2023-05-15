@@ -51,7 +51,6 @@ const router = new Router({
 //   }
 // })
 router.beforeEach((to, from, next) => {
-  // const ewaybillToken = localStorage.getItem('ewaybillToken')
   if (to.meta.layout === "AuthLayout") {
     if (!isLoggedIn()) {
         next({
@@ -62,7 +61,6 @@ router.beforeEach((to, from, next) => {
         next();
     }
   } else {
-    console.log("coming here" + to)
     if(to.name === "LoginPage" && isLoggedIn()){
       router.push("/")
     }

@@ -16,6 +16,7 @@
               outlined
               label="Email"
               required
+              dense
             ></v-text-field>
           </v-row>
           <v-row>
@@ -25,6 +26,7 @@
               block
               elevation="0"
               color="primary"
+              :loading="apiLoading"
             >
               Send link
             </v-btn>
@@ -41,6 +43,7 @@
     name: "ForgotPassword",
     data: () => ({
       email: "",
+      apiLoading: false,
     }),
 
     methods: {
@@ -48,7 +51,12 @@
         const payload = {
           "email": this.email
         }
+        this.apiLoading = true;
         const response = await postForgotPassword(payload)
+        this.apiLoading = false
+        if(response==true){
+            this.email = ""
+        }
         console.log(response)
       },
     },
