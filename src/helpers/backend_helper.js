@@ -22,7 +22,7 @@ export const postLogin = async (email, password) => {
 }
 
 export const postRegister = async (payload) => {
-
+  //it is not working when the api is failing
   return axiosApi.post(url.POST_REGISTER, payload,{addToken: false})
   .then(response => {
     if (response.status >= 200 || response.status <= 299) {
