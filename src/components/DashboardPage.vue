@@ -38,13 +38,16 @@
         </v-select>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <div>
+        <div class="d-flex">
         <v-icon color="#5F6367" class="mx-1" v-on:click="editEwaybill(item)">mdi-pencil</v-icon>
         <v-icon color="#5F6367" v-on:click="deleteEwaybill(item)">mdi-delete</v-icon>
         </div>
       </template>
       <template v-slot:[`item.generationTime`]="{item}">
         {{new Date(item.generationTime).toLocaleDateString()}}
+      </template>
+      <template v-slot:[`item.expiryTime`]="{item}">
+        {{new Date(item.expiryTime).toLocaleDateString()}}
       </template>
     </v-data-table>
     <v-dialog
@@ -83,42 +86,152 @@
         </v-card>
       </v-dialog>
       <v-dialog
-        v-model="showTimerModal"
-        max-width="500"
+        v-model="showEditModal"
+        max-width="700"
       >
         <v-card>
           <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
-            Set time for daily emails
+            Edit Ewaybill
           </v-card-title>
-            <v-form v-if="showTimerModal" class="mx-9 mt-3">
-              <v-time-picker
-                v-model="emailTiming"
-                full-width
-                :allowed-minutes="allowedMinutes"
-                ampm-in-title
-                format="ampm"
-              ></v-time-picker>
-            </v-form>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              text="true"
-              color="primary"
-              elevation="0"
-              class="ml-3 mr-4 mb-8 mt-7"
-              outlined
-              @click="closeTimerModal"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              class="v-btn-submit mr-6"
-              color="primary"
-              @click="setTimerModalTime"
-            >
-              Continue
-            </v-btn>
-          </v-card-actions>
+            <v-form class="ml-6 mt-4" ref="manualForm">
+        <v-container>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Ewaybill Number</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="ewaybillNumber"
+                        type="text"
+                        outlined
+                        label="Ewaybill Number"
+                        :rules="nameRules"
+                        required
+                        dense
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Distance</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="distance"
+                        type="number"
+                        outlined
+                        label="Distance"
+                        :rules="distanceRules"
+                        required
+                        dense
+                        class="pa-0"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Generation Time</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="generationTime"
+                        type="date"
+                        outlined
+                        label="Generation Time"
+                        required
+                        dense
+                        :rules="generationTimeRules"
+                        :max="nowDate"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Source Address</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="sourceAddress"
+                        type="text"
+                        outlined
+                        label="Source Address"
+                        required
+                        dense
+                        :rules="sourceAddressRules"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Destination Address</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="destinationAddress"
+                        type="text"
+                        outlined
+                        label="Destination Address"
+                        required
+                        dense
+                        :rules="destAddressRules"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Party Name</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="partyName"
+                        type="text"
+                        outlined
+                        label="Party Name"
+                        required
+                        dense
+                        :rules="partyNameRules"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row justify="center" align="center">
+                <v-col md="2">
+                    <p>Vehicle Number</p>
+                </v-col>
+                <v-col>
+                    <v-text-field
+                        v-model="vehicleNumber"
+                        type="text"
+                        outlined
+                        label="Vehicle Number"
+                        required
+                        dense
+                        :rules="vehicleNumberRules"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-btn
+                    class="v-btn-submit"
+                    @click="submitEditEwaybill"
+                    medium
+                >
+                    Submit
+                </v-btn>
+                <v-btn
+                    class="ml-3 mr-4 mb-8"
+                    outlined
+                    @click="clearEditForm"
+                    text="true"
+                    medium
+                    color="primary"
+                    elevation="0"
+                >
+                    Clear
+                </v-btn>
+            </v-row>
+        </v-container>
+        
+        </v-form>
         </v-card>
       </v-dialog>
   </v-card>
@@ -126,7 +239,7 @@
 </template>
 
 <script>
-  import {getAllEwaybills, updateEwaybill, deleteEwaybillItem, updateEmailTiming} from "../helpers/backend_helper"
+  import {getAllEwaybills, updateEwaybill, deleteEwaybillItem} from "../helpers/backend_helper"
 import LoadingScreen from './LoadingScreen.vue';
 
   export default {
@@ -140,7 +253,6 @@ import LoadingScreen from './LoadingScreen.vue';
         loadingScreen: false,
         dialog: false,
         deliveryModal: false,
-        nowDate: new Date().toISOString().slice(0,10),
         deliveryDatePayload: {},
         deliveryDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         dialogMsg: "",
@@ -148,9 +260,44 @@ import LoadingScreen from './LoadingScreen.vue';
         selectedStatus: "",
         toBeDeleted: 0,
         search: '',
-        showTimerModal: false,
+        showEditModal: false,
         emailTiming: "10:00",
         allowedMinutes: [],
+        ewaybillNumber: "",
+        distance: "",
+        generationTime: "",
+        sourceAddress: "",
+        destinationAddress: "",
+        status: "New",
+        vehicleNumber: "",
+        partyName: "",
+        editId: "",
+        nowDate: new Date().toISOString().slice(0,10),
+        pdfRules: [
+          v => !!v || 'Ewaybill is required'
+        ],
+        nameRules: [
+          v => !!v || 'Name is required',
+        ],
+        distanceRules: [
+          v => !!v || 'Distance is required',
+          v => (v && v >= 0) || 'Distance should be positive',
+        ],
+        generationTimeRules: [
+          v => !!v || 'Generation time is required',
+        ],
+        sourceAddressRules: [
+          v => !!v || 'Source address is required',
+        ],
+        destAddressRules: [
+          v => !!v || 'Destination address is required',
+        ],
+        partyNameRules: [
+          v => !!v || 'Party Name is required',
+        ],
+        vehicleNumberRules: [
+          v => !!v || 'Vehicle Number is required',
+        ],
         headers: [
           { text: 'Number', align: 'start', sortable: false, value: 'ewaybillNumber' },
           { text: 'Distance', value: 'distance', sortable: false },
@@ -159,17 +306,14 @@ import LoadingScreen from './LoadingScreen.vue';
           { text: 'Destination Address', value: 'destAddress', sortable: false },
           { text: 'Status', value: 'status', sortable: false },
           { text: 'Vehicle Number', value: 'vehicleNumber', sortable: false },
-          { text: 'Actions', value: 'actions', width: '10%', sortable: false },
+          { text: 'Expiry Time', value: 'expiryTime', sortable: false },
+          { text: 'Actions', value: 'actions', sortable: false },
         ],  
       }
     },
     async created(){
         this.loadingScreen = true
         const response = await getAllEwaybills();
-        this.showTimerModal = false
-        if(response?.ifEmailTimeSet===false){
-          this.showTimerModal = true
-        }
         this.loadingScreen = false;
         this.ewaybills = response;
         console.log(this.ewaybills);
@@ -191,16 +335,6 @@ import LoadingScreen from './LoadingScreen.vue';
       closeDialog(){
         this.dialog = false
         this.deliveryModal = false
-      },  
-      closeTimerModal(){
-        this.showTimerModal = false
-      },
-      async setTimerModalTime(){
-        console.log(this.emailTiming)
-        await updateEmailTiming({
-          emailTime: this.emailTiming
-        })
-        this.showTimerModal = false
       },
       openDeliveryModal(payload){
         if(payload.status === "Delivered"){
@@ -209,10 +343,45 @@ import LoadingScreen from './LoadingScreen.vue';
           this.deliveryModal = true
           this.deliveryDatePayload = payload
         }
-        
+      },
+      clearEditForm(){
+        this.ewaybillNumber = ""
+        this.distance = ""
+        this.generationTime = ""
+        this.sourceAddress = ""
+        this.destinationAddress = ""
+        this.partyName = ""
+        this.vehicleNumber = ""
       },
       editEwaybill(item){
+        this.showEditModal = true
+        this.editId = item.id
+        this.ewaybillNumber = item.ewaybillNumber
+        this.distance = item.distance
+        this.generationTime = new Date(item.generationTime).toISOString().slice(0,10)
+        this.sourceAddress = item.sourceAddress
+        this.destinationAddress = item.destAddress
+        this.partyName = item.partyName
+        this.vehicleNumber = item.vehicleNumber
         console.log(item)
+      },
+      async submitEditEwaybill(){
+        const response = await updateEwaybill({
+          "id": this.editId,
+          "ewaybillNumber": this.ewaybillNumber,
+          "distance": this.distance,
+          "generationTime": this.generationTime,
+          "sourceAddress": this.sourceAddress,
+          "destAddress": this.destinationAddress,
+          "partyName": this.partyName,
+          "status": this.status,
+          "vehicleNumber": this.vehicleNumber
+        });
+        this.showEditModal = false
+        this.$nextTick(async () => {
+          this.ewaybills = await getAllEwaybills();
+        });
+        console.log(response)
       },
       deleteEwaybill(item){
         this.dialogMsg = "Are you sure you want to delete this item?"
@@ -220,9 +389,6 @@ import LoadingScreen from './LoadingScreen.vue';
         this.dialog = true;
         this.toBeDeleted = item.id
       },
-      // async updateDeliveryDate(){
-      //   const response = await 
-      // },
       async confirmDeleteItem(){
         this.apiLoading = true
         console.log(this.apiLoading + " apiloading")
@@ -235,12 +401,6 @@ import LoadingScreen from './LoadingScreen.vue';
       }
     }
   }
-  // enter delivery date when the user delivers the item
-  // add party name field in db and in form also, display it in the email also
-  // add regex in all the fields in form
-  //red - expired ewaybills  - three categories
-  //orange - today
-  //yellow - tomorrow
 </script>
 
 

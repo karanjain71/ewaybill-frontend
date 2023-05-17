@@ -194,6 +194,7 @@
   export default {
     name: "CreateEwaybill",
     data: () => ({
+      file: [],
       ewaybill_number: "",
       distance: "",
       generation_time: "",
@@ -202,7 +203,6 @@
       status: "New",
       vehicle_number: "",
       party_name: "",
-      file: [],
       nowDate: new Date().toISOString().slice(0,10),
       pdfRules: [
         v => !!v || 'Ewaybill is required'
