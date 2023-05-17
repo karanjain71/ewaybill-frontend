@@ -10,11 +10,11 @@ import VueLogger from 'vuejs-logger';
 Vue.config.productionTip = false
 Vue.config.devtools = true
 
-if(process.env.NODE_ENV === 'production'){
-  const {worker} = require('./mocks')
-  worker.start()
-}
-const isProduction = process.env.NODE_ENV === 'production';
+// if(process.env.NODE_ENV === 'localhost'){
+//   const {worker} = require('./mocks')
+//   worker.start()
+// }
+// const isProduction = process.env.NODE_ENV === 'production';
  
 const options = {
     isEnabled: true,
