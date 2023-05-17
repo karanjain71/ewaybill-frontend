@@ -51,7 +51,7 @@ const router = new Router({
 //   }
 // })
 router.beforeEach((to, from, next) => {
-  if (to.meta.layout === "AuthLayout") {
+  if (to.meta.protected === true) {
     if (!isLoggedIn()) {
         next({
             path: "/login",

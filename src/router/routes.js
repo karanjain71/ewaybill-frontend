@@ -7,6 +7,7 @@ import CreateEwaybill from '../components/CreateEwaybill.vue';
 import ArchivedEwaybills from '../components/ArchivedEwaybills.vue';
 import UserProfile from '../components/UserProfile.vue';
 import ResetPassword from '../components/ResetPassword.vue';
+import WelcomePage from '../components/WelcomePage.vue';
 
 
 const routes = [
@@ -19,6 +20,7 @@ const routes = [
                 path: '/',
                 name: 'DashboardPage',
                 meta: {
+                    protected: true,
                     layout: 'AuthLayout',
                 },
                 component: DashboardPage
@@ -27,6 +29,7 @@ const routes = [
                 path: '/create-ewaybill',
                 name: 'CreateEwaybill',
                 meta: {
+                    protected: true,
                     layout: 'AuthLayout',
                 },
                 component: CreateEwaybill
@@ -35,6 +38,7 @@ const routes = [
                 path: '/archived-ewaybills',
                 name: 'ArchivedEwaybills',
                 meta: {
+                    protected: true,
                     layout: 'AuthLayout',
                 },
                 component: ArchivedEwaybills
@@ -43,9 +47,19 @@ const routes = [
                 path: '/profile',
                 name: 'UserProfile',
                 meta: {
+                    protected: true,
                     layout: 'AuthLayout',
                 },
                 component: UserProfile
+            },
+            {
+                path: '/welcome-page',
+                name: 'WelcomePage',
+                meta: {
+                    protected: true,
+                    layout: 'NonAuthLayout',
+                },
+                component: WelcomePage
             },
         ]
     },
@@ -53,6 +67,7 @@ const routes = [
         path: '/login',
         name: 'LoginPage',
         meta: {
+            protected: false,
             layout: 'NonAuthLayout',
         },
         component: LoginPage,
@@ -61,6 +76,7 @@ const routes = [
         path: '/register',
         name: 'RegisterPage',
         meta: {
+            protected: false,
             layout: 'NonAuthLayout',
         },
         component: RegisterPage,
@@ -69,6 +85,7 @@ const routes = [
         path: '/forgot-password',
         name: 'ForgotPassword',
         meta: {
+            protected: false,
             layout: 'NonAuthLayout',
         },
         component: ForgotPassword,
@@ -77,6 +94,7 @@ const routes = [
         path: '/reset-password',
         name: 'ResetPassword',
         meta: {
+            protected: false,
             layout: 'NonAuthLayout',
         },
         component: ResetPassword,
@@ -85,6 +103,7 @@ const routes = [
         path: '/*',
         name: 'PageNotFound',
         meta: {
+            protected: false,
             layout: 'NonAuthLayout',
         },
         component: PageNotFound,

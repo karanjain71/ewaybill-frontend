@@ -22,7 +22,6 @@
       :items="ewaybills"
       :search="search"
       show-select
-      dense
       mobile-breakpoint="0"
     >
       <template v-slot:[`item.status`]="{ item }">

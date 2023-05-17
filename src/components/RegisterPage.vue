@@ -111,7 +111,9 @@
           "name": this.name,
           "email": this.email,
           "password": this.password,
-          "about": this.about
+          "about": this.about,
+          "phoneNumber": "+91"+this.phoneNumber,
+          "loginCount": 0,
         }
         const response = await postRegister(payload)
         this.apiLoading = false

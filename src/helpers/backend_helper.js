@@ -227,3 +227,18 @@ export const resetUserPasswordLink = async (payload) => {
     return err.response.data.success;
   })
 }
+
+export const postWelcomePageDetails = async (payload) => {
+  return axiosApi.post(url.USER_WELCOME_DETAILS, payload, {addToken: true})
+  .then(response => {
+    if(response.status>=200 && response.status<=299){
+      store.dispatch('notifications/setNotificationsList', {text: response.data.msg,color: 'green'})
+      return response.data.success
+    }
+    throw response.data.success
+  })
+  .catch(err => {
+    store.dispatch('notifications/setNotificationsList', {text: err.response.data.msg,color: 'red'})
+    return err.response.data.success;
+  })
+}

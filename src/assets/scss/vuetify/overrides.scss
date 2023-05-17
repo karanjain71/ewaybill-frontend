@@ -38,6 +38,7 @@
   // align-items: top !important;
   padding-top: 0;
   height: 48px;
+  border-color: red;
 }
 //   .v-input__control{
 //       padding-top: 0;
@@ -60,3 +61,11 @@
 // .v-label--active .error--text {
 //   transform: translateY(-50px) scale(1);
 // }
+
+.v-text-field--outlined >>> fieldset {
+  border-color: rgba(192, 0, 250, 0.986);
+}
+
+.custom-text-field .v-text-field__slot input {
+  border-color: green; /* Set the desired border color */
+}

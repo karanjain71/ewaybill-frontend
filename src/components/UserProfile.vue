@@ -79,6 +79,7 @@
               >
 
             </v-text-field>
+            
             <v-text-field
               v-else-if="dialogFieldName=='phone'"
               label="Phone Number"
@@ -91,6 +92,18 @@
               >
 
             </v-text-field>
+            <v-time-picker
+              v-else-if="dialogFieldName=='emailTime'"
+              label="Email Time"
+              class="mx-9 mt-2 pt-3"
+              v-model="userDetails.emailTime"
+              dense
+              outlined
+              :allowed-minutes="[]"
+
+              >
+
+            </v-time-picker>
             <v-text-field
               v-if="dialogFieldName=='password'"
               label="Current Password"
@@ -187,6 +200,7 @@ export default {
         { id: "email", text: 'Email Address', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
         { id: "password", text: 'Password', icon: 'mdi-lock', endIcon: 'mdi-chevron-right' },
         { id: "additionalEmail", text: 'Additional Email', icon: 'mdi-email-outline', endIcon: 'mdi-chevron-right' },
+        { id: "emailTime", text: 'Email Timing', icon: 'mdi-clock', endIcon: 'mdi-chevron-right' },
       ],
       dialog: false,
       phoneNumber: "",
@@ -248,6 +262,10 @@ export default {
         this.dialogFieldType = "text"
         this.dialogFieldName = "additionalEmail"
       }
+      else if(item.id=="emailTime"){
+        this.dialogTitle = "Update Your Email Timings"
+        this.dialogFieldName = "emailTime"
+      }
       this.dialog = true
     },
     closeDialog(){
@@ -259,7 +277,8 @@ export default {
         "email": this.userDetails.email,
         "name": this.userDetails.name,
         "additionalEmail": this.userDetails.additionalEmail,
-        "phoneNumber": this.userDetails.phoneNumber
+        "phoneNumber": this.userDetails.phoneNumber,
+        "emailTime": this.userDetails.emailTime
       })
       this.apiLoading = false
       this.dialog = false

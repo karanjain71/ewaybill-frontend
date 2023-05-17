@@ -79,7 +79,7 @@ import router from '@/router'
     data: () => ({
       loading: false,
       email: "jainkaran049@gmail.com",
-      password: "12345",
+      password: "123",
       rememberMe: false,
       show: false,
       apiLoading: false
@@ -91,10 +91,15 @@ import router from '@/router'
         const response = await postLogin(this.email, this.password)
         console.log("logging with" + this.email)
         this.apiLoading = false
-        console.log(response + " printing response")
+        console.log(JSON.stringify(response) + " printing response")
         localStorage.setItem('ewaybillToken', response.token);
         store.dispatch("userDetails/setUserDetailsAction", {email:this.email})
-        router.push('/')
+        if(response.firstLogin === true){
+          router.push("/welcome-page")
+        }
+        else{
+          router.push("/")
+        }
         console.log(response)
 
       },
