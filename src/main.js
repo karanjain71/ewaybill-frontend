@@ -18,7 +18,6 @@ Vue.config.devtools = true
  
 const options = {
     isEnabled: true,
-    logLevel : isProduction ? 'error' : 'debug',
     stringifyArguments : true,
     showLogLevel : true,
     showMethodName : true,
