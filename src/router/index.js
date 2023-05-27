@@ -27,7 +27,7 @@ const router = new Router({
       }
     }
   },
-  routes
+  routes,
 });
 // eslint-disable-next-line
 // router.beforeEach((to, from, next) => {
@@ -53,22 +53,20 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.meta.protected === true) {
     if (!isLoggedIn()) {
-        next({
-            path: "/login",
-            query: { redirect: to.fullPath }
-        });
+      next({
+        path: "/login",
+        query: { redirect: to.fullPath },
+      });
     } else {
-        next();
+      next();
     }
   } else {
-    if(to.name === "LoginPage" && isLoggedIn()){
-      router.push("/")
-    }
-    else{
+    if (to.name === "LoginPage" && isLoggedIn()) {
+      router.push("/");
+    } else {
       next();
     }
   }
-})
-
+});
 
 export default router;

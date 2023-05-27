@@ -11,8 +11,7 @@
 
 
 <script>
-
-export default({
-    name: "LoadingScreen",
-})
+export default {
+  name: "LoadingScreen",
+};
 </script>

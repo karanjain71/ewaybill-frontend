@@ -1,5 +1,5 @@
-export default function() {
-    return {
-        notifications: [], 
-    };
+export default function () {
+  return {
+    notifications: [],
+  };
 }

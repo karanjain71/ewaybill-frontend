@@ -1,113 +1,112 @@
-import LoginPage from '../components/LoginPage.vue';
-import RegisterPage from '../components/RegisterPage.vue';
-import PageNotFound from '../components/PageNotFound.vue';
-import ForgotPassword from '../components/ForgotPassword.vue';
-import DashboardPage from '../components/DashboardPage.vue';
-import CreateEwaybill from '../components/CreateEwaybill.vue';
-import ArchivedEwaybills from '../components/ArchivedEwaybills.vue';
-import UserProfile from '../components/UserProfile.vue';
-import ResetPassword from '../components/ResetPassword.vue';
-import WelcomePage from '../components/WelcomePage.vue';
-
+import LoginPage from "../components/LoginPage.vue";
+import RegisterPage from "../components/RegisterPage.vue";
+import PageNotFound from "../components/PageNotFound.vue";
+import ForgotPassword from "../components/ForgotPassword.vue";
+import DashboardPage from "../components/DashboardPage.vue";
+import CreateEwaybill from "../components/CreateEwaybill.vue";
+import ArchivedEwaybills from "../components/ArchivedEwaybills.vue";
+import UserProfile from "../components/UserProfile.vue";
+import ResetPassword from "../components/ResetPassword.vue";
+import WelcomePage from "../components/WelcomePage.vue";
 
 const routes = [
-    {
-        path: '/',
-        name: 'AuthLayout',
-        component: () => import('../layouts/AuthLayout.vue'),
-        children: [
-            {
-                path: '/',
-                name: 'DashboardPage',
-                meta: {
-                    protected: true,
-                    layout: 'AuthLayout',
-                },
-                component: DashboardPage
-            },
-            {
-                path: '/create-ewaybill',
-                name: 'CreateEwaybill',
-                meta: {
-                    protected: true,
-                    layout: 'AuthLayout',
-                },
-                component: CreateEwaybill
-            },
-            {
-                path: '/archived-ewaybills',
-                name: 'ArchivedEwaybills',
-                meta: {
-                    protected: true,
-                    layout: 'AuthLayout',
-                },
-                component: ArchivedEwaybills
-            },
-            {
-                path: '/profile',
-                name: 'UserProfile',
-                meta: {
-                    protected: true,
-                    layout: 'AuthLayout',
-                },
-                component: UserProfile
-            },
-            {
-                path: '/welcome-page',
-                name: 'WelcomePage',
-                meta: {
-                    protected: true,
-                    layout: 'NonAuthLayout',
-                },
-                component: WelcomePage
-            },
-        ]
-    },
-    {
-        path: '/login',
-        name: 'LoginPage',
+  {
+    path: "/",
+    name: "AuthLayout",
+    component: () => import("../layouts/AuthLayout.vue"),
+    children: [
+      {
+        path: "/",
+        name: "DashboardPage",
         meta: {
-            protected: false,
-            layout: 'NonAuthLayout',
+          protected: true,
+          layout: "AuthLayout",
         },
-        component: LoginPage,
-    },
-    {
-        path: '/register',
-        name: 'RegisterPage',
+        component: DashboardPage,
+      },
+      {
+        path: "/create-ewaybill",
+        name: "CreateEwaybill",
         meta: {
-            protected: false,
-            layout: 'NonAuthLayout',
+          protected: true,
+          layout: "AuthLayout",
         },
-        component: RegisterPage,
-    },
-    {
-        path: '/forgot-password',
-        name: 'ForgotPassword',
+        component: CreateEwaybill,
+      },
+      {
+        path: "/archived-ewaybills",
+        name: "ArchivedEwaybills",
         meta: {
-            protected: false,
-            layout: 'NonAuthLayout',
+          protected: true,
+          layout: "AuthLayout",
         },
-        component: ForgotPassword,
-    },
-    {
-        path: '/reset-password',
-        name: 'ResetPassword',
+        component: ArchivedEwaybills,
+      },
+      {
+        path: "/profile",
+        name: "UserProfile",
         meta: {
-            protected: false,
-            layout: 'NonAuthLayout',
+          protected: true,
+          layout: "AuthLayout",
         },
-        component: ResetPassword,
-    },
-    {
-        path: '/*',
-        name: 'PageNotFound',
+        component: UserProfile,
+      },
+      {
+        path: "/welcome-page",
+        name: "WelcomePage",
         meta: {
-            protected: false,
-            layout: 'NonAuthLayout',
+          protected: true,
+          layout: "NonAuthLayout",
         },
-        component: PageNotFound,
+        component: WelcomePage,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    name: "LoginPage",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
     },
+    component: LoginPage,
+  },
+  {
+    path: "/register",
+    name: "RegisterPage",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
+    },
+    component: RegisterPage,
+  },
+  {
+    path: "/forgot-password",
+    name: "ForgotPassword",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
+    },
+    component: ForgotPassword,
+  },
+  {
+    path: "/reset-password",
+    name: "ResetPassword",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
+    },
+    component: ResetPassword,
+  },
+  {
+    path: "/*",
+    name: "PageNotFound",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
+    },
+    component: PageNotFound,
+  },
 ];
 
 export default routes;
