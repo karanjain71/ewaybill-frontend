@@ -1,5 +1,6 @@
 <template>
     <v-card 
+        outlined
         rounded
         class="mx-auto my-15 p-10 align-center"
         max-width="430"
@@ -8,7 +9,7 @@
       <v-row align="center" justify="center" class="container mb-3">
         <h3 class="mt-8">Log in to E-Tracker</h3>
       </v-row>
-      <v-form class="mx-8 mt-4">
+      <v-form class="mx-8 mt-4" @submit.prevent="loginUser" ref="loginForm">
         <v-container>
           <v-row>
             <v-text-field
@@ -17,6 +18,7 @@
               label="Email"
               required
               dense
+              :rules="[rules.required, rules.email]"
             ></v-text-field>
           </v-row>
           <v-row>
@@ -40,19 +42,14 @@
           <v-row>
             <v-btn
               class="mr-4 py-6"
-              @click="loginUser"
               block
               elevation="0"
               color="primary"
               :loading="apiLoading"
+              type="submit"
             >
               Log in
             </v-btn>
-            <!-- <a href="http://localhost:8080/api/auth/user">
-              <v-btn >
-                Login With Google
-              </v-btn>
-            </a> -->
           </v-row>
           <v-row align="center" justify="center">
             <p class="mt-6" style="font-weight:bold" ><span style="color:blue; font-weight: bold">
@@ -82,25 +79,47 @@ import router from '@/router'
       password: "123",
       rememberMe: false,
       show: false,
-      apiLoading: false
+      apiLoading: false,
+      rules: {
+          required: value => !!value || 'Required.',
+          counter: value => value.length <= 20 || 'Max 20 characters',
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
+        },
     }),
 
     methods: {
        async loginUser () {
         this.apiLoading = true
-        const response = await postLogin(this.email, this.password)
-        console.log("logging with" + this.email)
-        this.apiLoading = false
-        console.log(JSON.stringify(response) + " printing response")
-        localStorage.setItem('ewaybillToken', response.token);
-        store.dispatch("userDetails/setUserDetailsAction", {email:this.email})
-        if(response.firstLogin === true){
-          router.push("/welcome-page")
+        try{
+            if(this.$refs.loginForm.validate()){
+                const response = await postLogin(this.email, this.password)
+                console.log(response)
+                console.log("logging with" + this.email)
+                localStorage.setItem('ewaybillToken', response.token);
+                store.dispatch("userDetails/setUserDetailsAction", {email:this.email})
+                if(response.firstLogin === true){
+                  router.push("/welcome-page")
+                }
+                else{
+                  router.push("/")
+                }
+                console.log(response)
+          }
+          else{
+              store.dispatch('notifications/setNotificationsList', {text: 'Error in form. Please fill all fields properly',color: 'red'})
+          }
+          this.apiLoading = false
         }
-        else{
-          router.push("/")
+        catch{
+          console.log("inside log")
+          this.apiLoading = false
         }
-        console.log(response)
+        
+
+        
 
       },
       clear () {

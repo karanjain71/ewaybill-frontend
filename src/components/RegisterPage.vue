@@ -1,5 +1,6 @@
 <template>
     <v-card 
+        outlined
         rounded
         class="mx-auto my-15 p-10 align-center"
         max-width="450"
@@ -8,7 +9,7 @@
       <div class="container">
         <h3 class="align-center mt-8 ml-6">Register to E-Tracker</h3>
       </div>
-      <v-form class="mx-8 mt-4" v-model="form">
+      <v-form class="mx-8 mt-4" v-model="form" @submit.prevent="registerUser" ref="registerForm">
         <v-container>
           <v-row>
             <v-text-field
@@ -16,6 +17,7 @@
               outlined
               label="Name"
               required
+              :rules="[rules.required]"
               dense
             ></v-text-field>
           </v-row>
@@ -26,6 +28,7 @@
               label="Email"
               required
               dense
+              :rules="[rules.required, rules.email]"
             ></v-text-field>
           </v-row>
           <v-row>
@@ -35,6 +38,7 @@
               label="Password"
               required
               dense
+              :rules="[rules.required]"
               :type="show ? 'text' : 'password'"
             >
             
@@ -53,6 +57,7 @@
               label="Phone Number"
               required
               dense
+              :rules="[rules.required, rules.phoneNumber]"
               prefix="+91"	
             ></v-text-field>
           </v-row>
@@ -62,13 +67,14 @@
               outlined
               label="About"
               required
+              :rules="[rules.required]"
               dense
             ></v-text-field>
           </v-row>
           <v-row>
             <v-btn
               class="mr-4 py-6"
-              @click="submit"
+              type="submit"
               block
               elevation="0"
               color="primary"
@@ -89,7 +95,7 @@
 
 <script>
   import {postRegister} from "@/helpers/backend_helper"
-
+  import store from "./../store/index"
   export default {
     name: "RegisterPage",
     data: () => ({
@@ -101,26 +107,52 @@
       phoneNumber: "",
       about: "",
       form: {},
-      apiLoading: false
+      apiLoading: false,
+      rules: {
+          required: value => !!value || 'Required.',
+          counter: value => value.length <= 20 || 'Max 20 characters',
+          email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Invalid e-mail.'
+          },
+          phoneNumber: value=> {
+            const pattern = /^\d{10}$/
+            return pattern.test(value) || 'Invalid Phone Number'
+          }
+        },
     }),
 
     methods: {
-      async submit () {
+      async registerUser () {
         this.apiLoading = true
-        const payload = {
+        try{
+          const payload = {
           "name": this.name,
           "email": this.email,
           "password": this.password,
           "about": this.about,
           "phoneNumber": "+91"+this.phoneNumber,
           "loginCount": 0,
+          }
+          if(this.$refs.registerForm.validate()){
+            const response = await postRegister(payload)
+            this.apiLoading = false
+            if(response == true){
+              this.$refs.registerForm.reset()
+            }
+          }
+          else{
+            console.log("coming here")
+            store.dispatch('notifications/setNotificationsList', {text: 'Error in form. Please fill all fields properly',color: 'red'})
+          }
+          this.apiLoading = false
+          
         }
-        const response = await postRegister(payload)
-        this.apiLoading = false
-        if(response == true){
-          console.log("clearing the fields")
-          this.clear()
+        catch{
+          console.log("eahrjhfjd")
+          this.apiLoading = false
         }
+        
       },
       clear () {
         this.email = ""

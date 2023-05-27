@@ -1,6 +1,7 @@
 <template>
     <v-card 
         rounded
+        outlined
         class="mx-auto my-15 p-10 align-center"
         max-width="430"
         elevation="0"
