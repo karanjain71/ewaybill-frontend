@@ -5,8 +5,7 @@
       v-model="drawer"
       app
       dark
-      mobile-breakpoint="760"
-      style="backgroundcolor: #000022"
+      class="nav-color"
     >
       <v-list-item class="">
         <v-list-item-icon>
@@ -169,6 +168,10 @@ export default {
 <style scoped>
 .list-item-class {
   color: #f5f5f5;
+}
+
+.nav-color {
+  background-color: #000022;
 }
 
 .selected-tile:hover {
