@@ -177,6 +177,21 @@
           >
             Clear
           </v-btn>
+          <v-btn
+            class="ml-3 mr-4 mb-8"
+            outlined
+            @click="paymentTesting"
+            text="true"
+            medium
+            color="primary"
+            elevation="0"
+          >
+            Payment
+          </v-btn>
+          <razorpay-payment
+            :payment_amount="100000"
+            v-if="paymentModal == true"
+          />
         </v-row>
       </v-container>
     </v-form>
@@ -189,7 +204,10 @@ import {
   postCreateEwaybillPdf,
 } from "../helpers/backend_helper";
 import store from "@/store/index";
+import RazorpayPayment from "./RazorpayPayment.vue";
+
 export default {
+  components: { RazorpayPayment },
   name: "CreateEwaybill",
   data: () => ({
     file: [],
@@ -201,6 +219,7 @@ export default {
     status: "New",
     vehicle_number: "",
     party_name: "",
+    paymentModal: false,
     nowDate: new Date().toISOString().slice(0, 10),
     pdfRules: [(v) => !!v || "Ewaybill is required"],
     nameRules: [
@@ -262,6 +281,10 @@ export default {
       this.source_address = "";
       this.vehicle_number = "";
       this.party_name = "";
+    },
+    paymentTesting() {
+      this.paymentModal = true;
+      console.log(this.paymentModal + " here");
     },
   },
 };

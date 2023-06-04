@@ -13,3 +13,4 @@ export const UPDATE_EMAIL_TIMING = "/api/users/emailTiming";
 export const RESET_PASSWORD = "/api/users/resetPassword";
 export const RESET_PASSWORD_LINK = "/api/auth/resetPasswordLink";
 export const USER_WELCOME_DETAILS = "/api/users/welcomeDetails";
+export const RAZORPAY_PAYMENT = "/api/payment/razorpay";

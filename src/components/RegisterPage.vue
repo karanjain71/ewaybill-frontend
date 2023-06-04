@@ -7,7 +7,9 @@
     elevation="0"
   >
     <div class="container">
-      <h3 class="align-center mt-8 ml-6">Register to E-Tracker</h3>
+      <h3 class="align-center mt-8 ml-6">
+        Register to E-Tracker for free 90 days trial
+      </h3>
     </div>
     <v-form
       class="mx-8 mt-4"

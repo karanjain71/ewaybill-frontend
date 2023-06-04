@@ -328,3 +328,72 @@ export const postWelcomePageDetails = async (payload) => {
       return err.response.data.success;
     });
 };
+
+export const createOrder = async (amount) => {
+  return axiosApi
+    .get(url.RAZORPAY_PAYMENT + `/${amount}`, { addToken: true })
+    .then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
+        // store.dispatch("notifications/setNotificationsList", {
+        //   text: response.data.msg,
+        //   color: "green",
+        // });
+        console.log("Payment done");
+        return response.data.success;
+      }
+      throw response.data.success;
+    })
+    .catch((err) => {
+      store.dispatch("notifications/setNotificationsList", {
+        text: err.response.data.msg,
+        color: "red",
+      });
+      return err.response.data.success;
+    });
+};
+
+// const Razorpay = useRazorpay();
+
+// export const handlePayment = async () => {
+//   const order = await createOrder();
+
+//   const options = {
+//     key: "rzp_test_fgJt0trJ9",
+//     amount: amount * 100,
+//     currency: "INR",
+//     name: userName,
+//     description: "Test Transaction",
+//     // image: "https://example.com/your_logo",
+//     order_id: order,
+//     handler: function (response) {
+//       alert(response.razorpay_payment_id);
+//       alert(response.razorpay_order_id);
+//       alert(response.razorpay_signature);
+//     },
+//     prefill: {
+//       name: userName,
+//       email: email,
+//       contact: contact,
+//     },
+//     notes: {
+//       address: "ABC, Delhi",
+//     },
+//     theme: {
+//       color: "#3399cc",
+//     },
+//   };
+
+//   const rzp1 = new Razorpay(options);
+
+//   rzp1.on("payment.failed", function (response) {
+//     alert(response.error.code);
+//     alert(response.error.description);
+//     alert(response.error.source);
+//     alert(response.error.step);
+//     alert(response.error.reason);
+//     alert(response.error.metadata.order_id);
+//     alert(response.error.metadata.payment_id);
+//   });
+
+//   rzp1.open();
+// };

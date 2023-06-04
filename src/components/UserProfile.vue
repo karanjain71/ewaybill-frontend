@@ -20,12 +20,21 @@
             </v-list-item-icon>
             <v-list-item-content class="flexing">
               <v-list-item-title>{{ item.text }} </v-list-item-title>
-              <v-list-item-title class="mr-8" v-if="item.id !== 'password'">{{
-                userDetails[item.id]
-              }}</v-list-item-title>
-              <v-list-item-title class="mr-8" v-else
+
+              <v-list-item-title class="mr-8" v-if="item.id === 'password'"
                 >********</v-list-item-title
               >
+              <v-list-item-title class="mr-8" v-else-if="item.id === 'planType'"
+                >Your {{ userDetails["planType"] }} plan expires on
+                {{
+                  formatLocalDateTime(
+                    userDetails["planValidTillTime"]
+                  ).toLocaleDateString()
+                }}</v-list-item-title
+              >
+              <v-list-item-title class="mr-8" v-else>{{
+                userDetails[item.id]
+              }}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-icon class="py-7">
               <v-icon>{{ item.endIcon }}</v-icon>
@@ -201,6 +210,7 @@ import store from "@/store";
 import { updateUserDetails, resetUserPassword } from "@/helpers";
 import LoadingScreen from "./LoadingScreen.vue";
 import { mapGetters } from "vuex";
+import { formatLocalDateTime } from "./../helpers/common_functions";
 
 export default {
   components: { LoadingScreen },
@@ -216,7 +226,7 @@ export default {
       {
         id: "phoneNumber",
         text: "Phone Number",
-        icon: "mdi-phone",
+        icon: "mdi-phone-outline",
         endIcon: "mdi-chevron-right",
       },
       {
@@ -228,7 +238,7 @@ export default {
       {
         id: "password",
         text: "Password",
-        icon: "mdi-lock",
+        icon: "mdi-lock-outline",
         endIcon: "mdi-chevron-right",
       },
       {
@@ -240,7 +250,13 @@ export default {
       {
         id: "emailTime",
         text: "Email Timing",
-        icon: "mdi-clock",
+        icon: "mdi-clock-outline",
+        endIcon: "mdi-chevron-right",
+      },
+      {
+        id: "planType",
+        text: "Plan Type",
+        icon: "mdi-clock-outline",
         endIcon: "mdi-chevron-right",
       },
     ],
@@ -260,6 +276,8 @@ export default {
     showCurrentPassword: false,
     showNewPassword: false,
     showConfirmPassword: false,
+    planType: "",
+    planValidTillTime: "",
     apiLoading: false,
   }),
   async created() {
@@ -299,6 +317,8 @@ export default {
       } else if (item.id == "emailTime") {
         this.dialogTitle = "Update Your Email Timings";
         this.dialogFieldName = "emailTime";
+      } else if (item.id == "planType") {
+        this.dialogTitle = "Your plan settings";
       }
       this.dialog = true;
     },
@@ -355,6 +375,7 @@ export default {
         });
       }
     },
+    formatLocalDateTime,
   },
 };
 </script>

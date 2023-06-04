@@ -7,6 +7,8 @@ export default function () {
       additionalEmail: "",
       emailTime: "",
       ifEmailTimeSet: false,
+      planType: "",
+      planValidTillTime: "",
     },
   };
 }

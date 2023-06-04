@@ -43,10 +43,10 @@
       <template v-slot:[`item.actions`]="{ item }">
         <div class="d-flex">
           <v-icon color="#5F6367" class="mx-1" v-on:click="editEwaybill(item)"
-            >mdi-pencil</v-icon
+            >mdi-pencil-outline</v-icon
           >
           <v-icon color="#5F6367" v-on:click="deleteEwaybill(item)"
-            >mdi-delete</v-icon
+            >mdi-delete-outline</v-icon
           >
         </div>
       </template>
@@ -256,6 +256,7 @@ export default {
       dialog: false,
       deliveryModal: false,
       deliveryDatePayload: {},
+      paymentModal: false,
       deliveryDate: new Date(
         Date.now() - new Date().getTimezoneOffset() * 60000
       )
@@ -330,6 +331,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.deliveryModal = false;
+      this.paymentModal = false;
     },
     openDeliveryModal(payload) {
       if (payload.status === "Delivered") {
@@ -394,6 +396,9 @@ export default {
       this.apiLoading = false;
       console.log("Item deleted successfully" + response);
       this.dialog = false;
+    },
+    paymentTesting() {
+      this.paymentModal = true;
     },
   },
 };

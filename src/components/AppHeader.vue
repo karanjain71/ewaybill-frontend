@@ -112,7 +112,7 @@ export default {
     itemHeaders: [consts.DASHBOARD],
     items: [
       [
-        { title: consts.DASHBOARD, icon: "mdi-home", route: "/" },
+        { title: consts.DASHBOARD, icon: "mdi-home-outline", route: "/" },
         {
           title: consts.CREATE_EWAYBILL,
           icon: "mdi-calculator",
