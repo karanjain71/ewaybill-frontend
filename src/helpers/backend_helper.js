@@ -329,19 +329,37 @@ export const postWelcomePageDetails = async (payload) => {
     });
 };
 
-export const createOrder = async (amount) => {
+export const createOrderId = async (amount) => {
   return axiosApi
-    .get(url.RAZORPAY_PAYMENT + `/${amount}`, { addToken: true })
+    .get(url.GET_RAZORPAY_ORDER_ID + `/${amount}`, { addToken: true })
     .then((response) => {
       if (response.status >= 200 && response.status <= 299) {
-        // store.dispatch("notifications/setNotificationsList", {
-        //   text: response.data.msg,
-        //   color: "green",
-        // });
-        console.log("Payment done");
-        return response.data.success;
+        console.log("getting order id with", response);
+        return response.data;
       }
       throw response.data.success;
+    })
+    .catch((err) => {
+      store.dispatch("notifications/setNotificationsList", {
+        text: err.response.data,
+        color: "red",
+      });
+      return err.response.data.success;
+    });
+};
+
+export const createOrder = async (payload) => {
+  return axiosApi
+    .post(url.POST_RAZORPAY_CREATE_ORDER, payload, { addToken: true })
+    .then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
+        store.dispatch("notifications/setNotificationsList", {
+          text: "Payment recorded successfully",
+          color: "green",
+        });
+        return response.data;
+      }
+      throw response.data;
     })
     .catch((err) => {
       store.dispatch("notifications/setNotificationsList", {
@@ -351,7 +369,6 @@ export const createOrder = async (amount) => {
       return err.response.data.success;
     });
 };
-
 // const Razorpay = useRazorpay();
 
 // export const handlePayment = async () => {

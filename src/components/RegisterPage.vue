@@ -69,9 +69,9 @@
         </v-row>
         <v-row>
           <v-text-field
-            v-model="about"
+            v-model="gstNumber"
             outlined
-            label="About"
+            label="GST Number"
             required
             :rules="[rules.required]"
             dense
@@ -114,7 +114,7 @@ export default {
     email: "",
     password: "",
     phoneNumber: "",
-    about: "",
+    gstNumber: "",
     form: {},
     apiLoading: false,
     rules: {
@@ -140,7 +140,7 @@ export default {
           name: this.name,
           email: this.email,
           password: this.password,
-          about: this.about,
+          gstNumber: this.gstNumber,
           phoneNumber: "+91" + this.phoneNumber,
           loginCount: 0,
         };
@@ -167,7 +167,7 @@ export default {
       this.email = "";
       this.password = "";
       this.username = "";
-      this.about = "";
+      this.gstNumber = "";
       this.phoneNumber = "";
       this.name = "";
     },

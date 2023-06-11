@@ -8,6 +8,8 @@ import ArchivedEwaybills from "../components/ArchivedEwaybills.vue";
 import UserProfile from "../components/UserProfile.vue";
 import ResetPassword from "../components/ResetPassword.vue";
 import WelcomePage from "../components/WelcomePage.vue";
+import RenewPlan from "../components/RenewPlan.vue";
+import PricingPage from "../components/PricingPage.vue";
 
 const routes = [
   {
@@ -50,6 +52,15 @@ const routes = [
           layout: "AuthLayout",
         },
         component: UserProfile,
+      },
+      {
+        path: "/renew-plan",
+        name: "RenewPlan",
+        meta: {
+          protected: true,
+          layout: "AuthLayout",
+        },
+        component: RenewPlan,
       },
       {
         path: "/welcome-page",
@@ -97,6 +108,15 @@ const routes = [
       layout: "NonAuthLayout",
     },
     component: ResetPassword,
+  },
+  {
+    path: "/pricing",
+    name: "Pricing",
+    meta: {
+      protected: false,
+      layout: "NonAuthLayout",
+    },
+    component: PricingPage,
   },
   {
     path: "/*",

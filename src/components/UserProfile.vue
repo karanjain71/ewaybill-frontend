@@ -1,30 +1,96 @@
 <template>
   <v-progress-circular model-value="20" v-if="apiLoading"></v-progress-circular>
   <loading-screen v-else-if="loadingScreen"></loading-screen>
-  <v-card
-    v-else
-    rounded
-    class="mx-auto my-4 rounded-lg"
-    max-width="1150"
-    elevation="0"
-    outlined
-  >
-    <v-list dense>
-      <v-subheader>ACCOUNT SETTINGS</v-subheader>
-      <v-divider></v-divider>
-      <v-list-item-group v-model="selectedItem" color="primary">
-        <template v-for="(item, index) in items">
-          <v-list-item :key="item.text" two-line @click="openDialog(item)">
+  <v-container v-else>
+    <v-card
+      rounded
+      class="mx-auto my-4 rounded-lg"
+      max-width="1150"
+      elevation="0"
+      outlined
+    >
+      <v-list dense>
+        <v-subheader>PERSONAL DETAILS</v-subheader>
+        <v-divider></v-divider>
+        <v-list-item-group v-model="selectedPersonalDetail" color="primary">
+          <template v-for="(item, index) in personalDetails">
+            <v-list-item :key="item.text" two-line @click="openDialog(item)">
+              <v-list-item-icon class="py-7">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="flexing">
+                <v-list-item-title>{{ item.text }} </v-list-item-title>
+                <v-list-item-title class="mr-8">{{
+                  userDetails[item.id]
+                }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-icon class="py-7">
+                <v-icon>{{ item.endIcon }}</v-icon>
+              </v-list-item-icon>
+            </v-list-item>
+            <v-divider
+              :key="item.text"
+              v-if="index + 1 < personalDetails.length"
+            ></v-divider>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+    <v-card
+      rounded
+      class="mx-auto my-4 rounded-lg"
+      max-width="1150"
+      elevation="0"
+      outlined
+    >
+      <v-list dense>
+        <v-subheader>ACCOUNT SETTINGS</v-subheader>
+        <v-divider></v-divider>
+        <v-list-item-group v-model="selectedAccountSetting" color="primary">
+          <template v-for="(item, index) in accountSettings">
+            <v-list-item :key="item.text" two-line @click="openDialog(item)">
+              <v-list-item-icon class="py-7">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="flexing">
+                <v-list-item-title>{{ item.text }} </v-list-item-title>
+                <v-list-item-title class="mr-8" v-if="item.id === 'password'"
+                  >********</v-list-item-title
+                >
+                <v-list-item-title v-else class="mr-8">{{
+                  userDetails[item.id]
+                }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-icon class="py-7">
+                <v-icon>{{ item.endIcon }}</v-icon>
+              </v-list-item-icon>
+            </v-list-item>
+            <v-divider
+              :key="item.text"
+              v-if="index + 1 < accountSettings.length"
+            ></v-divider>
+          </template>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+    <v-card
+      rounded
+      class="mx-auto my-4 rounded-lg"
+      max-width="1150"
+      elevation="0"
+      outlined
+    >
+      <v-list dense>
+        <v-subheader>PLAN DETAILS</v-subheader>
+        <v-divider></v-divider>
+        <template>
+          <v-list-item v-for="(item, i) in planDetails" two-line :key="i">
             <v-list-item-icon class="py-7">
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-content class="flexing">
               <v-list-item-title>{{ item.text }} </v-list-item-title>
-
-              <v-list-item-title class="mr-8" v-if="item.id === 'password'"
-                >********</v-list-item-title
-              >
-              <v-list-item-title class="mr-8" v-else-if="item.id === 'planType'"
+              <v-list-item-title class="mr-8" v-if="item.id === 'planType'"
                 >Your {{ userDetails["planType"] }} plan expires on
                 {{
                   formatLocalDateTime(
@@ -32,21 +98,21 @@
                   ).toLocaleDateString()
                 }}</v-list-item-title
               >
-              <v-list-item-title class="mr-8" v-else>{{
+              <v-list-item-title v-else class="mr-8">{{
                 userDetails[item.id]
               }}</v-list-item-title>
             </v-list-item-content>
-            <v-list-item-icon class="py-7">
-              <v-icon>{{ item.endIcon }}</v-icon>
+            <v-list-item-icon class="py-3">
+              <v-btn class="v-btn-submit" @click="renewPlan">Renew Now</v-btn>
             </v-list-item-icon>
           </v-list-item>
           <v-divider
             :key="item.text"
-            v-if="index + 1 < items.length"
+            v-if="index + 1 < planDetails.length"
           ></v-divider>
         </template>
-      </v-list-item-group>
-    </v-list>
+      </v-list>
+    </v-card>
     <v-dialog v-model="dialog" max-width="700" round>
       <v-card>
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
@@ -202,7 +268,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -216,7 +282,7 @@ export default {
   components: { LoadingScreen },
   name: "UserProfile",
   data: () => ({
-    items: [
+    personalDetails: [
       {
         id: "name",
         text: "Name",
@@ -227,18 +293,6 @@ export default {
         id: "phoneNumber",
         text: "Phone Number",
         icon: "mdi-phone-outline",
-        endIcon: "mdi-chevron-right",
-      },
-      {
-        id: "email",
-        text: "Email Address",
-        icon: "mdi-email-outline",
-        endIcon: "mdi-chevron-right",
-      },
-      {
-        id: "password",
-        text: "Password",
-        icon: "mdi-lock-outline",
         endIcon: "mdi-chevron-right",
       },
       {
@@ -253,6 +307,22 @@ export default {
         icon: "mdi-clock-outline",
         endIcon: "mdi-chevron-right",
       },
+    ],
+    accountSettings: [
+      {
+        id: "email",
+        text: "Email Address",
+        icon: "mdi-email-outline",
+        endIcon: "mdi-chevron-right",
+      },
+      {
+        id: "password",
+        text: "Password",
+        icon: "mdi-lock-outline",
+        endIcon: "mdi-chevron-right",
+      },
+    ],
+    planDetails: [
       {
         id: "planType",
         text: "Plan Type",
@@ -321,6 +391,9 @@ export default {
         this.dialogTitle = "Your plan settings";
       }
       this.dialog = true;
+    },
+    renewPlan() {
+      this.$router.push("/renew-plan");
     },
     closeDialog() {
       this.dialog = false;
