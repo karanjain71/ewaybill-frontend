@@ -25,7 +25,9 @@
         ><span>&#8377;</span>1,200 paid annually</v-card-subtitle
       >
     </v-card>
-    <v-divider class="mx-20 my-4" />
+    <div class="divider-breaker"><span>or</span></div>
+
+    <!-- <v-divider class="mx-20 my-4" /> -->
     <v-card
       rounded
       :class="
@@ -99,7 +101,7 @@ export default {
 
 <style scoped>
 .card {
-  border-width: 5px;
+  border-width: 3px;
 }
 .card::before {
   font-size: 0.875rem;
@@ -109,12 +111,12 @@ export default {
   position: absolute;
   top: 0.125rem;
   padding: 0.25rem 1rem 0.375rem 1.5rem;
-  background-color: #0365f2;
+  background-color: #188cd8;
   transform: translateY(-50%);
 }
 
 .active-card {
-  border: 5px solid #3281d5;
+  border: 3px solid #188cd8;
 }
 .card:hover {
   background-color: white;

@@ -163,7 +163,12 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-btn class="v-btn-submit" @click="uploadEwaybill" medium>
+          <v-btn
+            class="v-btn-submit"
+            @click="uploadEwaybill"
+            medium
+            color="primary"
+          >
             Submit
           </v-btn>
           <v-btn

@@ -114,9 +114,11 @@
       </v-list>
     </v-card>
     <v-dialog v-model="dialog" max-width="700" round>
-      <v-card>
+      <v-card class="dialog-card">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogTitle }}
+          <v-spacer />
+          <v-icon>mdi-close</v-icon>
         </v-card-title>
         <v-form>
           <v-text-field

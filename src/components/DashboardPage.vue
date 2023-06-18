@@ -58,9 +58,11 @@
       </template>
     </v-data-table>
     <v-dialog v-model="dialog" max-width="500">
-      <v-card>
+      <v-card class="dialog-card">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogMsg }}
+          <v-spacer />
+          <v-icon>mdi-close</v-icon>
         </v-card-title>
         <v-form v-if="deliveryModal" class="mx-9 mt-3">
           <v-date-picker
@@ -92,8 +94,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="showEditModal" max-width="700">
-      <v-card>
+    <v-dialog v-model="showEditModal" max-width="900">
+      <v-card class="dialog-card px-5">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           Edit Ewaybill
         </v-card-title>

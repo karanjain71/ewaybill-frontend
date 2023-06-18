@@ -50,6 +50,27 @@
             Log in
           </v-btn>
         </v-row>
+        <v-row>
+          <!-- eslint-disable-next-line -->
+          <!-- <social-login /> -->
+          <div
+            id="g_id_onload"
+            data-client_id="1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-auto_prompt="false"
+          ></div>
+
+          <div
+            class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left"
+          ></div>
+        </v-row>
         <v-row align="center" justify="center">
           <p class="mt-6" style="font-weight: bold">
             <span style="color: blue; font-weight: bold">
@@ -72,10 +93,13 @@
 
 <script>
 import { postLogin } from "@/helpers/backend_helper";
+// import { GoogleLogin } from "vue-google-login";
 import store from "./../store/index";
 import router from "@/router";
+// import SocialLogin from "./SocialLogin.vue";
 export default {
   name: "LoginPage",
+  // components: { SocialLogin },
   data: () => ({
     loading: false,
     email: "jainkaran049@gmail.com",
@@ -83,6 +107,15 @@ export default {
     rememberMe: false,
     show: false,
     apiLoading: false,
+    params: {
+      client_id:
+        "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+    },
+    renderParams: {
+      width: 250,
+      height: 50,
+      longtitle: true,
+    },
     rules: {
       required: (value) => !!value || "Required.",
       counter: (value) => value.length <= 20 || "Max 20 characters",
@@ -93,7 +126,16 @@ export default {
       },
     },
   }),
-
+  mounted: function () {
+    function handleCallback(response) {
+      console.log(response + " is here");
+    }
+    // eslint-disable-next-line
+    google.accounts.id.initialize({
+      client_id: this.client_id,
+      callback: handleCallback,
+    });
+  },
   methods: {
     async loginUser() {
       this.apiLoading = true;
@@ -123,6 +165,14 @@ export default {
         console.log("inside log");
         this.apiLoading = false;
       }
+    },
+    onSignInSuccess(googleUser) {
+      // Handle successful sign-in
+      console.log("Signed in as: " + googleUser.getBasicProfile().getName());
+    },
+    onSignInFailure(error) {
+      // Handle sign-in error
+      console.error(error);
     },
     clear() {
       this.email = "";

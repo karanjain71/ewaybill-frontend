@@ -29,6 +29,7 @@
         </v-row>
         <v-row>
           <v-dialog
+            class="dialog-card"
             ref="dialog"
             v-model="modal2"
             :return-value.sync="time"

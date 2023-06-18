@@ -71,7 +71,7 @@
             <v-icon>mdi-account</v-icon>
           </v-btn>
         </template>
-        <v-list background-color="#3281D5">
+        <v-list background-color="primary">
           <v-list-item>
             <v-list-item-title class="ml-2 bg-primary">
               {{ userDetails.email }}
@@ -85,12 +85,11 @@
           <v-list-item>
             <v-btn
               elevation="0"
-              color="#ebf2fb"
+              color="hoverPrimary"
               class="px-15 py-5 ml-2 mt-3 mb-2"
               @click="logoutUser"
-              style="color: #3281d5"
             >
-              Logout
+              <span :style="{ color: '#3281d5' }">Logout</span>
             </v-btn>
           </v-list-item>
         </v-list>

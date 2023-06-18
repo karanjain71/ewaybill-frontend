@@ -118,7 +118,10 @@ export default {
 .v-btn-submit {
   box-shadow: none !important;
   margin: 0 4px 8px 3px !important;
-  background-color: #3281d5 !important;
+  background-color: #188cd8 !important;
   color: white !important;
+}
+.dialog-card {
+  border-radius: 16px !important;
 }
 </style>
