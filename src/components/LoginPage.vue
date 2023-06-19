@@ -53,7 +53,7 @@
         <v-row>
           <!-- eslint-disable-next-line -->
           <!-- <social-login /> -->
-          <div
+          <!-- <div
             id="g_id_onload"
             data-client_id="1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com"
             data-context="signin"
@@ -69,7 +69,8 @@
             data-text="signin_with"
             data-size="large"
             data-logo_alignment="left"
-          ></div>
+          ></div> -->
+          <div id="buttonDiv"></div>
         </v-row>
         <v-row align="center" justify="center">
           <p class="mt-6" style="font-weight: bold">
@@ -92,10 +93,12 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { postLogin } from "@/helpers/backend_helper";
 // import { GoogleLogin } from "vue-google-login";
 import store from "./../store/index";
 import router from "@/router";
+import jwt_decode from "jwt-decode";
 // import SocialLogin from "./SocialLogin.vue";
 export default {
   name: "LoginPage",
@@ -126,15 +129,35 @@ export default {
       },
     },
   }),
-  mounted: function () {
-    function handleCallback(response) {
-      console.log(response + " is here");
-    }
-    // eslint-disable-next-line
-    google.accounts.id.initialize({
-      client_id: this.client_id,
-      callback: handleCallback,
-    });
+  created: function (){
+    function handleCredentialResponse(response) {
+        try{
+          console.log("Encoded JWT ID token: " + response.credential);
+          const decoded = jwt_decode(response.credential);
+          console.log(decoded);
+          console.log(this)
+          localStorage.setItem("ewaybillToken","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXJhbmphaW43MUBnbWFpbC5jb20iLCJpYXQiOjE2ODcxNzA2NzQsImV4cCI6MTY4Nzg3MDY3NH0.XGfdQESFchUZCaPXn8TkBks6WwrjZM7GCLExgeHKffvXWgr7BY3ZOK0F4Y_70fV4YaXlzGDvBVN91RqRURRHnw")
+          store.dispatch("userDetails/setUserDetailsAction", {
+            email: "karanjain71@gmail.com",
+          });
+          router.push("/")
+        }
+        catch(e){
+          console.log(e + " Error logging it with Google")
+        }
+
+        }
+        window.onload = function () {
+          google.accounts.id.initialize({
+            client_id: "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            { theme: "outline", size: "large" }  // customization attributes
+          );
+          google.accounts.id.prompt(); // also display the One Tap dialog
+        }
   },
   methods: {
     async loginUser() {
