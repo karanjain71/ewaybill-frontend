@@ -23,6 +23,7 @@
       :search="search"
       show-select
       mobile-breakpoint="0"
+      no-data-text="No archived ewaybills"
     >
       <template v-slot:[`item.generationTime`]="{ item }">
         {{ new Date(item.generationTime).toLocaleDateString() }}

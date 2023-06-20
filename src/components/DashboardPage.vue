@@ -13,7 +13,6 @@
         hide-details
         outlined
         dense
-        no-data-text="No data available"
         clearable
       ></v-text-field>
     </v-card-title>
@@ -23,6 +22,7 @@
       :search="search"
       show-select
       mobile-breakpoint="0"
+      no-data-text="No ewaybills added"
     >
       <template v-slot:[`item.status`]="{ item }">
         <v-select
@@ -62,7 +62,7 @@
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogMsg }}
           <v-spacer />
-          <v-icon>mdi-close</v-icon>
+          <v-icon @click="closeDialog">mdi-close</v-icon>
         </v-card-title>
         <v-form v-if="deliveryModal" class="mx-9 mt-3">
           <v-date-picker

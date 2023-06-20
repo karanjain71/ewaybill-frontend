@@ -51,26 +51,7 @@
           </v-btn>
         </v-row>
         <v-row>
-          <!-- eslint-disable-next-line -->
-          <!-- <social-login /> -->
-          <!-- <div
-            id="g_id_onload"
-            data-client_id="1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com"
-            data-context="signin"
-            data-ux_mode="popup"
-            data-auto_prompt="false"
-          ></div>
-
-          <div
-            class="g_id_signin"
-            data-type="standard"
-            data-shape="rectangular"
-            data-theme="outline"
-            data-text="signin_with"
-            data-size="large"
-            data-logo_alignment="left"
-          ></div> -->
-          <div id="buttonDiv"></div>
+          <div id="googleLogin" class="mt-6 mx-auto"></div>
         </v-row>
         <v-row align="center" justify="center">
           <p class="mt-6" style="font-weight: bold">
@@ -126,7 +107,8 @@ export default {
       },
     },
   }),
-  created: function () {
+  mounted: function () {
+    loadGoogle()
     async function handleCredentialResponse(response) {
       try {
         const decoded = jwt_decode(response.credential);
@@ -146,14 +128,14 @@ export default {
         console.log(e + " Error logging it with Google");
       }
     }
-    window.onload = function () {
+    function loadGoogle() {
       google.accounts.id.initialize({
         client_id:
           "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
         callback: handleCredentialResponse,
       });
       google.accounts.id.renderButton(
-        document.getElementById("buttonDiv"),
+        document.getElementById("googleLogin"),
         { theme: "outline", size: "large" } // customization attributes
       );
       google.accounts.id.prompt(); // also display the One Tap dialog

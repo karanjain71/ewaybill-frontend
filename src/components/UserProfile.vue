@@ -165,7 +165,7 @@
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogTitle }}
           <v-spacer />
-          <v-icon>mdi-close</v-icon>
+          <v-icon @click="closeDialog">mdi-close</v-icon>
         </v-card-title>
         <v-form>
           <v-card-subtitle

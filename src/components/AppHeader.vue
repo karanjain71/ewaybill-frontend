@@ -150,7 +150,6 @@ export default {
       }
     },
     closeDrawer() {
-      console.log("is it getting called");
       console.log(this.isMobile(), window.innerWidth);
       if (this.isMobile()) {
         this.mini = false;
@@ -158,7 +157,7 @@ export default {
       } else {
         this.drawer = true;
         this.mini = !this.mini;
-        console.log(this.drawer, this.mini, "coming here");
+        // console.log(this.drawer, this.mini, "coming here");
       }
     },
   },
