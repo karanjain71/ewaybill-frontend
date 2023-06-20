@@ -94,19 +94,16 @@
 
 <script>
 /* eslint-disable */
-import { postLogin } from "@/helpers/backend_helper";
-// import { GoogleLogin } from "vue-google-login";
+import { postLogin, postGoogleLogin } from "@/helpers/backend_helper";
 import store from "./../store/index";
 import router from "@/router";
 import jwt_decode from "jwt-decode";
-// import SocialLogin from "./SocialLogin.vue";
 export default {
   name: "LoginPage",
-  // components: { SocialLogin },
   data: () => ({
     loading: false,
     email: "jainkaran049@gmail.com",
-    password: "123",
+    password: "12345",
     rememberMe: false,
     show: false,
     apiLoading: false,
@@ -129,35 +126,38 @@ export default {
       },
     },
   }),
-  created: function (){
-    function handleCredentialResponse(response) {
-        try{
-          console.log("Encoded JWT ID token: " + response.credential);
-          const decoded = jwt_decode(response.credential);
-          console.log(decoded);
-          console.log(this)
-          localStorage.setItem("ewaybillToken","eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrYXJhbmphaW43MUBnbWFpbC5jb20iLCJpYXQiOjE2ODcxNzA2NzQsImV4cCI6MTY4Nzg3MDY3NH0.XGfdQESFchUZCaPXn8TkBks6WwrjZM7GCLExgeHKffvXWgr7BY3ZOK0F4Y_70fV4YaXlzGDvBVN91RqRURRHnw")
-          store.dispatch("userDetails/setUserDetailsAction", {
-            email: "karanjain71@gmail.com",
-          });
-          router.push("/")
+  created: function () {
+    async function handleCredentialResponse(response) {
+      try {
+        const decoded = jwt_decode(response.credential);
+        const email = decoded.email;
+        const googleLoginResponse = await postGoogleLogin(decoded.email);
+        localStorage.setItem("ewaybillToken", googleLoginResponse.token);
+        console.log(googleLoginResponse);
+        store.dispatch("userDetails/setUserDetailsAction", {
+          email,
+        });
+        if (googleLoginResponse.firstLogin === true) {
+          router.push("/welcome-page");
+        } else {
+          router.push("/");
         }
-        catch(e){
-          console.log(e + " Error logging it with Google")
-        }
-
-        }
-        window.onload = function () {
-          google.accounts.id.initialize({
-            client_id: "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
-            callback: handleCredentialResponse
-          });
-          google.accounts.id.renderButton(
-            document.getElementById("buttonDiv"),
-            { theme: "outline", size: "large" }  // customization attributes
-          );
-          google.accounts.id.prompt(); // also display the One Tap dialog
-        }
+      } catch (e) {
+        console.log(e + " Error logging it with Google");
+      }
+    }
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id:
+          "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large" } // customization attributes
+      );
+      google.accounts.id.prompt(); // also display the One Tap dialog
+    };
   },
   methods: {
     async loginUser() {
@@ -165,8 +165,6 @@ export default {
       try {
         if (this.$refs.loginForm.validate()) {
           const response = await postLogin(this.email, this.password);
-          console.log(response);
-          console.log("logging with" + this.email);
           localStorage.setItem("ewaybillToken", response.token);
           store.dispatch("userDetails/setUserDetailsAction", {
             email: this.email,

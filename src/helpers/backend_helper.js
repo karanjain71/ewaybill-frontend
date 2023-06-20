@@ -28,6 +28,31 @@ export const postLogin = async (email, password) => {
     });
 };
 
+export const postGoogleLogin = async (email) => {
+  const payload = {
+    email: email,
+  };
+  return axiosApi
+    .post(url.POST_GOOGLE_LOGIN, payload, { addToken: false })
+    .then((response) => {
+      if (response.status >= 200 || response.status <= 299) {
+        store.dispatch("notifications/setNotificationsList", {
+          text: "LoggedIn successfully",
+          color: "green",
+        });
+        return response.data;
+      }
+      throw response.data;
+    })
+    .catch((err) => {
+      store.dispatch("notifications/setNotificationsList", {
+        text: "Error while google login, please try again",
+        color: "red",
+      });
+      console.log(err);
+    });
+};
+
 export const postRegister = async (payload) => {
   //it is not working when the api is failing
   return axiosApi

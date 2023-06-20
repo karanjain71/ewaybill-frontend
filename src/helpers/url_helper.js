@@ -1,4 +1,5 @@
 export const POST_LOGIN = "/api/auth/login";
+export const POST_GOOGLE_LOGIN = "/api/auth/googleLogin";
 export const POST_REGISTER = "/api/auth/register";
 export const POST_FORGOT_PASSWORD = "/api/auth/forgotPassword";
 export const POST_CREATE_EWAYBILL = "/api/ewaybills";
