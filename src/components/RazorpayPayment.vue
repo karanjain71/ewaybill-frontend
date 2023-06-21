@@ -50,14 +50,16 @@ export default {
       image: logo,
       description: `E-tracker subscription`,
       order_id: newOrderId,
-      handler: async function (response) {
-        console.log(this.payment_amount);
+      handler: async (response) => {
         console.log(response);
         await createOrder({
           orderId: response.razorpay_order_id,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpaySignature: response.razorpay_signature,
           amount: this.payment_amount,
+        });
+        store.dispatch("userDetails/setUserDetailsAction", {
+          email:this.userDetails.email,
         });
         store.dispatch("payments/setPaymentModalAction", false);
       },
@@ -69,6 +71,7 @@ export default {
       modal: {
         ondismiss: function () {
           store.dispatch("payments/setPaymentModalAction", false);
+          
           console.log("Checkout form closed");
         },
       },

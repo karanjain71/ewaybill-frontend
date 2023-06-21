@@ -10,6 +10,7 @@ import ResetPassword from "../components/ResetPassword.vue";
 import WelcomePage from "../components/WelcomePage.vue";
 import RenewPlan from "../components/RenewPlan.vue";
 import PricingPage from "../components/PricingPage.vue";
+import MyTransactions from "../components/MyTransactions.vue";
 
 const routes = [
   {
@@ -61,6 +62,15 @@ const routes = [
           layout: "AuthLayout",
         },
         component: RenewPlan,
+      },
+      {
+        path: "/transactions",
+        name: "MyTransactions",
+        meta: {
+          protected: true,
+          layout: "AuthLayout",
+        },
+        component: MyTransactions,
       },
       {
         path: "/welcome-page",

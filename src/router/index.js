@@ -58,7 +58,9 @@ router.beforeEach((to, from, next) => {
         query: { redirect: to.fullPath },
       });
     } else {
-      next();
+      if(to.path!=from.path){
+        next();
+      }
     }
   } else {
     if (to.name === "LoginPage" && isLoggedIn()) {

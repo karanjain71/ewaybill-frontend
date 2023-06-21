@@ -10,7 +10,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>PERSONAL DETAILS</v-subheader>
+        <v-subheader class="ml-3">PERSONAL DETAILS</v-subheader>
         <v-divider></v-divider>
         <v-list-item-group v-model="selectedPersonalDetail" color="primary">
           <template v-for="(item, index) in personalDetails">
@@ -44,7 +44,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>ACCOUNT SETTINGS</v-subheader>
+        <v-subheader class="ml-3">ACCOUNT SETTINGS</v-subheader>
         <v-divider></v-divider>
         <v-list-item-group v-model="selectedAccountSetting" color="primary">
           <template v-for="item in accountSettings">
@@ -91,7 +91,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>PLAN DETAILS</v-subheader>
+        <v-subheader class="ml-3">PLAN DETAILS</v-subheader>
         <v-divider></v-divider>
         <template>
           <v-list-item v-for="(item, i) in planDetails" two-line :key="i">
@@ -129,7 +129,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>SOCIAL LOGINS</v-subheader>
+        <v-subheader class="ml-3">SOCIAL LOGINS</v-subheader>
         <v-divider></v-divider>
         <template>
           <v-list-item v-for="(item, i) in socialLogins" two-line :key="i">

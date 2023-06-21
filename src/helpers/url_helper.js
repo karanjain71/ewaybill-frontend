@@ -16,3 +16,4 @@ export const RESET_PASSWORD_LINK = "/api/auth/resetPasswordLink";
 export const USER_WELCOME_DETAILS = "/api/users/welcomeDetails";
 export const GET_RAZORPAY_ORDER_ID = "/api/payments/razorpay/getOrderId";
 export const POST_RAZORPAY_CREATE_ORDER = "/api/payments/razorpay/createOrder";
+export const GET_RAZORPAY_PAYMENTS = "/api/payments";

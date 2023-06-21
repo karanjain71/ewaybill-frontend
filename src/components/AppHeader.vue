@@ -77,9 +77,13 @@
               {{ userDetails.email }}
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click="redirectToProfile">
+          <v-list-item @click="redirectToPath('/profile')">
             <v-icon class="mx-2">mdi-account</v-icon>
             <v-list-item-title class="text-muted"> Profile </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="redirectToPath('/transactions')">
+            <v-icon class="mx-2">mdi-cash</v-icon>
+            <v-list-item-title class="text-muted"> My Transactions</v-list-item-title>
           </v-list-item>
           <v-divider />
           <v-list-item>
@@ -102,6 +106,7 @@
 import { mapGetters } from "vuex";
 
 import consts from "../helpers/constants.js";
+// import router from "./../router/index"
 // import store from './../store/index'
 
 export default {
@@ -139,8 +144,10 @@ export default {
       localStorage.removeItem("ewaybillToken");
       this.$router.push({ path: "/login" });
     },
-    redirectToProfile() {
-      this.$router.push({ path: "/profile" });
+    redirectToPath(path) {
+      if(this.$router.currentRoute.path!==path){
+        this.$router.push({ path });
+      }
     },
     isMobile() {
       if (window.innerWidth <= 760) {
@@ -157,7 +164,6 @@ export default {
       } else {
         this.drawer = true;
         this.mini = !this.mini;
-        // console.log(this.drawer, this.mini, "coming here");
       }
     },
   },
