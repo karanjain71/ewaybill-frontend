@@ -51,10 +51,13 @@ export default {
       description: `E-tracker subscription`,
       order_id: newOrderId,
       handler: async function (response) {
+        console.log(this.payment_amount);
+        console.log(response);
         await createOrder({
           orderId: response.razorpay_order_id,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpaySignature: response.razorpay_signature,
+          amount: this.payment_amount,
         });
         store.dispatch("payments/setPaymentModalAction", false);
       },
