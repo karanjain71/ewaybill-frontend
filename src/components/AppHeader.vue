@@ -83,7 +83,9 @@
           </v-list-item>
           <v-list-item @click="redirectToPath('/transactions')">
             <v-icon class="mx-2">mdi-cash</v-icon>
-            <v-list-item-title class="text-muted"> My Transactions</v-list-item-title>
+            <v-list-item-title class="text-muted">
+              My Transactions</v-list-item-title
+            >
           </v-list-item>
           <v-divider />
           <v-list-item>
@@ -106,7 +108,7 @@
 import { mapGetters } from "vuex";
 
 import consts from "../helpers/constants.js";
-// import router from "./../router/index"
+import router from "./../router/index";
 // import store from './../store/index'
 
 export default {
@@ -144,11 +146,6 @@ export default {
       localStorage.removeItem("ewaybillToken");
       this.$router.push({ path: "/login" });
     },
-    redirectToPath(path) {
-      if(this.$router.currentRoute.path!==path){
-        this.$router.push({ path });
-      }
-    },
     isMobile() {
       if (window.innerWidth <= 760) {
         return true;
@@ -164,6 +161,11 @@ export default {
       } else {
         this.drawer = true;
         this.mini = !this.mini;
+      }
+    },
+    redirectToPath(path) {
+      if (router.currentRoute.path !== path) {
+        router.push({ path });
       }
     },
   },

@@ -140,11 +140,11 @@
               <v-list-item-title>{{ item.text }} </v-list-item-title>
               <v-list-item-title class="mr-13 pr-9">
                 <v-icon
-                  color="green"
+                  color="success"
                   v-if="userDetails['googleLoginEnabled'] === true"
-                  >mdi-check</v-icon
+                  >mdi-check-circle</v-icon
                 >
-                <v-icon color="red" v-else>mdi-alpha-x-circle-outline</v-icon>
+                <v-icon color="red" v-else>mdi-minus-circle</v-icon>
                 {{
                   userDetails["googleLoginEnabled"] === true
                     ? "Enabled"

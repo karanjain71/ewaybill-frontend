@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
         query: { redirect: to.fullPath },
       });
     } else {
-      if(to.path!=from.path){
+      if (to.path != from.path) {
         next();
       }
     }

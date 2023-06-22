@@ -3,7 +3,6 @@
     outlined
     class="mx-auto mt-10 px-4 py-4 rounded-lg"
     max-width="950"
-    max-height="600"
     elevation="0"
   >
     <v-row align="center" justify="center" class="container mb-3">
@@ -11,6 +10,32 @@
     </v-row>
     <v-form class="mx-8 mt-4">
       <v-container>
+        <v-row>
+          <p>GST Number</p>
+        </v-row>
+        <v-row>
+          <v-text-field
+            class="custom-text-field"
+            v-model="userDetails.gstNumber"
+            outlined
+            label="Enter GST Number"
+            required
+            dense
+          ></v-text-field>
+        </v-row>
+        <v-row>
+          <p>Phone Number</p>
+        </v-row>
+        <v-row>
+          <v-text-field
+            class="custom-text-field"
+            v-model="userDetails.phoneNumber"
+            outlined
+            label="Enter Phone Number"
+            required
+            dense
+          ></v-text-field>
+        </v-row>
         <v-row>
           <p>Additional Email</p>
         </v-row>
@@ -20,7 +45,6 @@
             v-model="userDetails.additionalEmail"
             outlined
             label="Enter Additional Email"
-            required
             dense
           ></v-text-field>
         </v-row>
@@ -81,7 +105,7 @@
             elevation="0"
             class="ml-3 mr-4 mb-8"
             outlined
-            @click="goToDashboard"
+            @click="redirectToPath('/create-ewaybill')"
           >
             Skip and continue
           </v-btn>
@@ -95,6 +119,7 @@
 import consts from "../helpers/constants.js";
 import { postWelcomePageDetails } from "./../helpers/backend_helper";
 import { mapGetters } from "vuex";
+import router from "./../router/index";
 export default {
   data: () => ({
     consts: consts,
@@ -105,22 +130,27 @@ export default {
     apiLoading: false,
   }),
   methods: {
-    goToDashboard() {
-      this.$router.push("/");
-    },
     async submitForm() {
       this.apiLoading = true;
       const response = await postWelcomePageDetails({
+        gstNumber: this.userDetails.gstNumber,
+        phoneNumber: this.userDetails.phoneNumber,
         additionalEmail: this.userDetails.additionalEmail,
         emailTime: this.time,
       });
       this.apiLoading = false;
       //redirect to create ewaybill page after successful
       console.log(JSON.stringify(response));
+      this.redirectToPath("/create-ewaybill");
     },
     closePicker: function (v) {
       this.time = v + ":00";
       console.log(this.time);
+    },
+    redirectToPath(path) {
+      if (router.currentRoute.path !== path) {
+        router.push({ path });
+      }
     },
   },
   computed: {
