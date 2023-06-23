@@ -11,7 +11,7 @@
     <v-form class="mx-8 mt-4">
       <v-container>
         <v-row>
-          <p>GST Number</p>
+          <p class="requireditem">GST Number</p>
         </v-row>
         <v-row>
           <v-text-field
@@ -24,11 +24,10 @@
           ></v-text-field>
         </v-row>
         <v-row>
-          <p>Phone Number</p>
+          <p class="requireditem">Phone Number</p>
         </v-row>
         <v-row>
           <v-text-field
-            class="custom-text-field"
             v-model="userDetails.phoneNumber"
             outlined
             label="Enter Phone Number"

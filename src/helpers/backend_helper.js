@@ -113,10 +113,9 @@ export const postCreateEwaybill = async (payload) => {
     })
     .catch((err) => {
       store.dispatch("notifications/setNotificationsList", {
-        text: "Error while adding ewaybill. Please retry",
+        text: err.response.data.msg,
         color: "red",
       });
-      console.log(err);
     });
 };
 
@@ -146,7 +145,7 @@ export const postCreateEwaybillPdf = async (payload) => {
     })
     .catch((err) => {
       store.dispatch("notifications/setNotificationsList", {
-        text: "Error while uploading ewaybill. Please retry",
+        text: err.response.data.msg,
         color: "red",
       });
       console.log(err);

@@ -126,3 +126,8 @@
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+.requireditem:after{
+  content:" *";
+  font-weight:bold;
+  color: red
+}
