@@ -8,7 +8,7 @@ export const formatLocalDateTime = (date) => {
     date[2],
     date[3],
     date[4],
-    date[5],
+    0,
     0
   ).toLocaleDateString();
 };

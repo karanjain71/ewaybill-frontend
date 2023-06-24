@@ -9,6 +9,7 @@ export default function () {
       ifEmailTimeSet: false,
       planType: "",
       planValidTillTime: "",
+      isGoogleLoginEnabled: false,
     },
   };
 }

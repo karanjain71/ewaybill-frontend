@@ -141,12 +141,12 @@
               <v-list-item-title class="mr-13 pr-9">
                 <v-icon
                   color="success"
-                  v-if="userDetails['googleLoginEnabled'] === true"
+                  v-if="userDetails['isGoogleLoginEnabled'] === true"
                   >mdi-check-circle</v-icon
                 >
                 <v-icon color="red" v-else>mdi-minus-circle</v-icon>
                 {{
-                  userDetails["googleLoginEnabled"] === true
+                  userDetails["isGoogleLoginEnabled"] === true
                     ? "Enabled"
                     : "Disabled"
                 }}</v-list-item-title
@@ -389,7 +389,7 @@ export default {
     ],
     socialLogins: [
       {
-        id: "googleLoginEnabled",
+        id: "isGoogleLoginEnabled",
         text: "Google",
         icon: "mdi-share-variant-outline",
       },

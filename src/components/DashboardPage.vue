@@ -51,13 +51,13 @@
         </div>
       </template>
       <template v-slot:[`item.generationTime`]="{ item }">
-        {{ new Date(item.generationTime).toLocaleDateString() }}
+        {{ formatLocalDateTime(item.generationTime) }}
       </template>
       <template v-slot:[`item.expiryTime`]="{ item }">
-        {{ new Date(item.expiryTime).toLocaleDateString() }}
+        {{ formatLocalDateTime(item.expiryTime) }}
       </template>
     </v-data-table>
-    <v-dialog v-model="dialog" max-width="500">
+    <v-dialog v-model="dialog" max-width="600">
       <v-card class="dialog-card">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogMsg }}
@@ -98,6 +98,8 @@
       <v-card class="dialog-card px-5">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           Edit Ewaybill
+          <v-spacer />
+          <v-icon @click="closeDialog">mdi-close</v-icon>
         </v-card-title>
         <v-form class="ml-6 mt-4" ref="manualForm">
           <v-container>
@@ -239,6 +241,7 @@
 </template>
 
 <script>
+import { formatLocalDateTime } from "@/helpers/common_functions";
 import {
   getAllEwaybills,
   updateEwaybill,
@@ -320,7 +323,15 @@ export default {
   },
   methods: {
     async changeStatus() {
-      this.deliveryDatePayload.deliveredTime = this.deliveryDate;
+      // this.deliveryDate = this.deliveryDate.to;
+      let timestamp = Date.parse(this.deliveryDate);
+      let date = new Date(timestamp);
+      console.log(date, timestamp, this.deliveryDate);
+      // this.deliveryDate.setHours(1);
+      // this.deliveryDate.setMinutes(0);
+      // this.deliveryDate.setSeconds(0);
+      // console.log(this.deliveryDate);
+      this.deliveryDatePayload.deliveredTime = date;
       await updateEwaybill(this.deliveryDatePayload);
       this.loadingScreen = true;
       this.$nextTick(async () => {
@@ -331,7 +342,9 @@ export default {
       this.deliveryModal = false;
     },
     closeDialog() {
+      this.status = "New";
       this.dialog = false;
+      this.showEditModal = false;
       this.deliveryModal = false;
       this.paymentModal = false;
     },
@@ -340,6 +353,8 @@ export default {
         this.dialogMsg = "Please enter delivery date";
         this.dialog = true;
         this.deliveryModal = true;
+        console.log(payload);
+        console.log("here");
         this.deliveryDatePayload = payload;
       }
     },
@@ -402,6 +417,7 @@ export default {
     paymentTesting() {
       this.paymentModal = true;
     },
+    formatLocalDateTime,
   },
 };
 </script>

@@ -26,10 +26,10 @@
       no-data-text="No archived ewaybills"
     >
       <template v-slot:[`item.generationTime`]="{ item }">
-        {{ new Date(item.generationTime).toLocaleDateString() }}
+        {{ formatLocalDateTime(item.generationTime) }}
       </template>
       <template v-slot:[`item.deliveredTime`]="{ item }">
-        {{ new Date(item.deliveredTime).toLocaleDateString() }}
+        {{ formatLocalDateTime(item.deliveredTime) }}
       </template>
       <!-- <template v-slot:header>
       <thead class="header">
@@ -56,6 +56,7 @@
 <script>
 import { getArchivedEwaybills } from "../helpers/backend_helper";
 import LoadingScreen from "./LoadingScreen.vue";
+import { formatLocalDateTime } from "./../helpers/common_functions";
 
 export default {
   components: { LoadingScreen },
@@ -90,7 +91,9 @@ export default {
     this.ewaybills = response;
     this.loadingScreen = false;
   },
-  methods: {},
+  methods: {
+    formatLocalDateTime,
+  },
 };
 </script>
 
