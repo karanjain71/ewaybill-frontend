@@ -20,16 +20,6 @@
       <v-container>
         <v-row>
           <v-text-field
-            v-model="name"
-            outlined
-            label="Name"
-            required
-            :rules="[rules.required]"
-            dense
-          ></v-text-field>
-        </v-row>
-        <v-row>
-          <v-text-field
             v-model="email"
             outlined
             label="Email"
@@ -55,27 +45,6 @@
               <v-icon color="primary" @click="show = !show">mdi-eye</v-icon>
             </template>
           </v-text-field>
-        </v-row>
-        <v-row>
-          <v-text-field
-            v-model="phoneNumber"
-            outlined
-            label="Phone Number"
-            required
-            dense
-            :rules="[rules.required, rules.phoneNumber]"
-            prefix="+91"
-          ></v-text-field>
-        </v-row>
-        <v-row>
-          <v-text-field
-            v-model="gstNumber"
-            outlined
-            label="GST Number"
-            required
-            :rules="[rules.required]"
-            dense
-          ></v-text-field>
         </v-row>
         <v-row>
           <v-btn
@@ -110,10 +79,7 @@ export default {
   data: () => ({
     loading: false,
     show: false,
-    name: "",
     email: "",
-    password: "",
-    phoneNumber: "",
     gstNumber: "",
     form: {},
     apiLoading: false,
@@ -125,10 +91,6 @@ export default {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || "Invalid e-mail.";
       },
-      phoneNumber: (value) => {
-        const pattern = /^\d{10}$/;
-        return pattern.test(value) || "Invalid Phone Number";
-      },
     },
   }),
 
@@ -137,11 +99,8 @@ export default {
       this.apiLoading = true;
       try {
         const payload = {
-          name: this.name,
           email: this.email,
           password: this.password,
-          gstNumber: this.gstNumber,
-          phoneNumber: "+91" + this.phoneNumber,
           loginCount: 0,
         };
         if (this.$refs.registerForm.validate()) {
@@ -167,9 +126,7 @@ export default {
       this.email = "";
       this.password = "";
       this.username = "";
-      this.gstNumber = "";
       this.phoneNumber = "";
-      this.name = "";
     },
 
     loginPage() {

@@ -1,4 +1,5 @@
 export const POST_LOGIN = "/api/auth/login";
+export const POST_GOOGLE_LOGIN = "/api/auth/googleLogin";
 export const POST_REGISTER = "/api/auth/register";
 export const POST_FORGOT_PASSWORD = "/api/auth/forgotPassword";
 export const POST_CREATE_EWAYBILL = "/api/ewaybills";
@@ -13,5 +14,6 @@ export const UPDATE_EMAIL_TIMING = "/api/users/emailTiming";
 export const RESET_PASSWORD = "/api/users/resetPassword";
 export const RESET_PASSWORD_LINK = "/api/auth/resetPasswordLink";
 export const USER_WELCOME_DETAILS = "/api/users/welcomeDetails";
-export const GET_RAZORPAY_ORDER_ID = "/api/payment/razorpay/getOrderId";
-export const POST_RAZORPAY_CREATE_ORDER = "/api/payment/razorpay/createOrder";
+export const GET_RAZORPAY_ORDER_ID = "/api/payments/razorpay/getOrderId";
+export const POST_RAZORPAY_CREATE_ORDER = "/api/payments/razorpay/createOrder";
+export const GET_RAZORPAY_PAYMENTS = "/api/payments";

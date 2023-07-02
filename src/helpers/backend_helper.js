@@ -28,6 +28,31 @@ export const postLogin = async (email, password) => {
     });
 };
 
+export const postGoogleLogin = async (email) => {
+  const payload = {
+    email: email,
+  };
+  return axiosApi
+    .post(url.POST_GOOGLE_LOGIN, payload, { addToken: false })
+    .then((response) => {
+      if (response.status >= 200 || response.status <= 299) {
+        store.dispatch("notifications/setNotificationsList", {
+          text: "LoggedIn successfully",
+          color: "green",
+        });
+        return response.data;
+      }
+      throw response.data;
+    })
+    .catch((err) => {
+      store.dispatch("notifications/setNotificationsList", {
+        text: "Error while google login, please try again",
+        color: "red",
+      });
+      console.log(err);
+    });
+};
+
 export const postRegister = async (payload) => {
   //it is not working when the api is failing
   return axiosApi
@@ -88,10 +113,9 @@ export const postCreateEwaybill = async (payload) => {
     })
     .catch((err) => {
       store.dispatch("notifications/setNotificationsList", {
-        text: "Error while adding ewaybill. Please retry",
+        text: err.response.data.msg,
         color: "red",
       });
-      console.log(err);
     });
 };
 
@@ -121,7 +145,7 @@ export const postCreateEwaybillPdf = async (payload) => {
     })
     .catch((err) => {
       store.dispatch("notifications/setNotificationsList", {
-        text: "Error while uploading ewaybill. Please retry",
+        text: err.response.data.msg,
         color: "red",
       });
       console.log(err);
@@ -369,48 +393,22 @@ export const createOrder = async (payload) => {
       return err.response.data.success;
     });
 };
-// const Razorpay = useRazorpay();
 
-// export const handlePayment = async () => {
-//   const order = await createOrder();
+export const getMyTransactions = async () => {
+  return axiosApi
+    .get(url.GET_RAZORPAY_PAYMENTS, { addToken: true })
+    .then((response) => {
+      if (response.status >= 200 && response.status <= 299) {
+        return response.data;
+      }
+      throw response.data;
+    })
+    .catch((err) => {
+      store.dispatch("notifications/setNotificationsList", {
+        text: err.response.data.msg,
+        color: "red",
+      });
+      return err.response.data.success;
+    });
+};
 
-//   const options = {
-//     key: "rzp_test_fgJt0trJ9",
-//     amount: amount * 100,
-//     currency: "INR",
-//     name: userName,
-//     description: "Test Transaction",
-//     // image: "https://example.com/your_logo",
-//     order_id: order,
-//     handler: function (response) {
-//       alert(response.razorpay_payment_id);
-//       alert(response.razorpay_order_id);
-//       alert(response.razorpay_signature);
-//     },
-//     prefill: {
-//       name: userName,
-//       email: email,
-//       contact: contact,
-//     },
-//     notes: {
-//       address: "ABC, Delhi",
-//     },
-//     theme: {
-//       color: "#3399cc",
-//     },
-//   };
-
-//   const rzp1 = new Razorpay(options);
-
-//   rzp1.on("payment.failed", function (response) {
-//     alert(response.error.code);
-//     alert(response.error.description);
-//     alert(response.error.source);
-//     alert(response.error.step);
-//     alert(response.error.reason);
-//     alert(response.error.metadata.order_id);
-//     alert(response.error.metadata.payment_id);
-//   });
-
-//   rzp1.open();
-// };

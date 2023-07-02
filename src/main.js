@@ -23,6 +23,14 @@ const options = {
   separator: "|",
   showConsoleColors: true,
 };
+// import GoogleAuth from "@/configs/google_oAuth.js";
+// const gauthOption = {
+//   clientId:
+//     "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+//   scope: "profile email",
+//   prompt: "select_account",
+// };
+// Vue.use(GoogleAuth, gauthOption);
 
 Vue.use(VueLogger, options);
 

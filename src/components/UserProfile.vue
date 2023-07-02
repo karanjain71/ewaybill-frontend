@@ -10,7 +10,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>PERSONAL DETAILS</v-subheader>
+        <v-subheader class="ml-3">PERSONAL DETAILS</v-subheader>
         <v-divider></v-divider>
         <v-list-item-group v-model="selectedPersonalDetail" color="primary">
           <template v-for="(item, index) in personalDetails">
@@ -44,10 +44,10 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>ACCOUNT SETTINGS</v-subheader>
+        <v-subheader class="ml-3">ACCOUNT SETTINGS</v-subheader>
         <v-divider></v-divider>
         <v-list-item-group v-model="selectedAccountSetting" color="primary">
-          <template v-for="(item, index) in accountSettings">
+          <template v-for="item in accountSettings">
             <v-list-item :key="item.text" two-line @click="openDialog(item)">
               <v-list-item-icon class="py-7">
                 <v-icon>{{ item.icon }}</v-icon>
@@ -65,12 +65,22 @@
                 <v-icon>{{ item.endIcon }}</v-icon>
               </v-list-item-icon>
             </v-list-item>
-            <v-divider
-              :key="item.text"
-              v-if="index + 1 < accountSettings.length"
-            ></v-divider>
+            <v-divider :key="item.text"></v-divider>
           </template>
         </v-list-item-group>
+        <v-list-item>
+          <v-list-item-icon class="py-7">
+            <v-icon>mdi-clock-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content class="flexing">
+            <v-list-item-title>Member Since </v-list-item-title>
+            <v-list-item-title class="mr-13 pr-9">
+              {{
+                formatLocalDateTime(userDetails["memberSince"])
+              }}</v-list-item-title
+            >
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-card>
     <v-card
@@ -81,7 +91,7 @@
       outlined
     >
       <v-list dense>
-        <v-subheader>PLAN DETAILS</v-subheader>
+        <v-subheader class="ml-3">PLAN DETAILS</v-subheader>
         <v-divider></v-divider>
         <template>
           <v-list-item v-for="(item, i) in planDetails" two-line :key="i">
@@ -93,9 +103,7 @@
               <v-list-item-title class="mr-8" v-if="item.id === 'planType'"
                 >Your {{ userDetails["planType"] }} plan expires on
                 {{
-                  formatLocalDateTime(
-                    userDetails["planValidTillTime"]
-                  ).toLocaleDateString()
+                  formatLocalDateTime(userDetails["planValidTillTime"])
                 }}</v-list-item-title
               >
               <v-list-item-title v-else class="mr-8">{{
@@ -113,12 +121,60 @@
         </template>
       </v-list>
     </v-card>
+    <v-card
+      rounded
+      class="mx-auto my-4 rounded-lg"
+      max-width="1150"
+      elevation="0"
+      outlined
+    >
+      <v-list dense>
+        <v-subheader class="ml-3">SOCIAL LOGINS</v-subheader>
+        <v-divider></v-divider>
+        <template>
+          <v-list-item v-for="(item, i) in socialLogins" two-line :key="i">
+            <v-list-item-icon class="py-7">
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="flexing">
+              <v-list-item-title>{{ item.text }} </v-list-item-title>
+              <v-list-item-title class="mr-13 pr-9">
+                <v-icon
+                  color="success"
+                  v-if="userDetails['isGoogleLoginEnabled'] === true"
+                  >mdi-check-circle</v-icon
+                >
+                <v-icon color="red" v-else>mdi-minus-circle</v-icon>
+                {{
+                  userDetails["isGoogleLoginEnabled"] === true
+                    ? "Enabled"
+                    : "Disabled"
+                }}</v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider
+            :key="item.text"
+            v-if="index + 1 < socialLogins.length"
+          ></v-divider>
+        </template>
+      </v-list>
+    </v-card>
     <v-dialog v-model="dialog" max-width="700" round>
-      <v-card>
+      <v-card class="dialog-card">
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogTitle }}
+          <v-spacer />
+          <v-icon @click="closeDialog">mdi-close</v-icon>
         </v-card-title>
         <v-form>
+          <v-card-subtitle
+            v-if="dialogFieldName == 'gstNumber'"
+            style="color: red"
+            class="pl-9"
+          >
+            GST Number cannot be changed
+          </v-card-subtitle>
           <v-text-field
             v-if="dialogFieldName == 'email'"
             label="Update Email"
@@ -131,12 +187,13 @@
           >
           </v-text-field>
           <v-text-field
-            v-else-if="dialogFieldName == 'name'"
-            label="Update Name"
-            class="mx-9 mt-2 pt-3"
+            v-else-if="dialogFieldName == 'gstNumber'"
+            label="Update GST Number"
+            class="mx-9 pt-3"
             type="text"
-            v-model="userDetails.name"
+            v-model="userDetails.gstNumber"
             dense
+            disabled
             outlined
           >
           </v-text-field>
@@ -284,8 +341,8 @@ export default {
   data: () => ({
     personalDetails: [
       {
-        id: "name",
-        text: "Name",
+        id: "gstNumber",
+        text: "GST Number",
         icon: "mdi-account-outline",
         endIcon: "mdi-chevron-right",
       },
@@ -330,6 +387,13 @@ export default {
         endIcon: "mdi-chevron-right",
       },
     ],
+    socialLogins: [
+      {
+        id: "isGoogleLoginEnabled",
+        text: "Google",
+        icon: "mdi-share-variant-outline",
+      },
+    ],
     dialog: false,
     phoneNumber: "",
     password: "",
@@ -368,10 +432,10 @@ export default {
         this.dialogTitle = "Change Your Email";
         this.dialogFieldType = "text";
         this.dialogFieldName = "email";
-      } else if (item.id == "name") {
-        this.dialogTitle = "Update Your Name";
+      } else if (item.id == "gstNumber") {
+        this.dialogTitle = "Update Your GST Number";
         this.dialogFieldType = "text";
-        this.dialogFieldName = "name";
+        this.dialogFieldName = "gstNumber";
       } else if (item.id == "phoneNumber") {
         this.dialogTitle = "Update Your Phone Number";
         this.dialogFieldType = "number";
@@ -402,7 +466,6 @@ export default {
       this.apiLoading = true;
       await updateUserDetails({
         email: this.userDetails.email,
-        name: this.userDetails.name,
         additionalEmail: this.userDetails.additionalEmail,
         phoneNumber: this.userDetails.phoneNumber,
         emailTime: this.userDetails.emailTime,

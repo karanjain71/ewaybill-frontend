@@ -50,6 +50,9 @@
             Log in
           </v-btn>
         </v-row>
+        <v-row>
+          <div id="googleLogin" class="mt-6 mx-auto"></div>
+        </v-row>
         <v-row align="center" justify="center">
           <p class="mt-6" style="font-weight: bold">
             <span style="color: blue; font-weight: bold">
@@ -71,18 +74,29 @@
 </template>
 
 <script>
-import { postLogin } from "@/helpers/backend_helper";
+/* eslint-disable */
+import { postLogin, postGoogleLogin } from "@/helpers/backend_helper";
 import store from "./../store/index";
 import router from "@/router";
+import jwt_decode from "jwt-decode";
 export default {
   name: "LoginPage",
   data: () => ({
     loading: false,
     email: "jainkaran049@gmail.com",
-    password: "123",
+    password: "12345",
     rememberMe: false,
     show: false,
     apiLoading: false,
+    params: {
+      client_id:
+        "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+    },
+    renderParams: {
+      width: 250,
+      height: 50,
+      longtitle: true,
+    },
     rules: {
       required: (value) => !!value || "Required.",
       counter: (value) => value.length <= 20 || "Max 20 characters",
@@ -93,15 +107,46 @@ export default {
       },
     },
   }),
-
+  mounted: function () {
+    loadGoogle()
+    async function handleCredentialResponse(response) {
+      try {
+        const decoded = jwt_decode(response.credential);
+        const email = decoded.email;
+        const googleLoginResponse = await postGoogleLogin(decoded.email);
+        localStorage.setItem("ewaybillToken", googleLoginResponse.token);
+        console.log(googleLoginResponse);
+        store.dispatch("userDetails/setUserDetailsAction", {
+          email,
+        });
+        if (googleLoginResponse.firstLogin === true) {
+          router.push("/welcome-page");
+        } else {
+          router.push("/");
+        }
+      } catch (e) {
+        console.log(e + " Error logging it with Google");
+      }
+    }
+    function loadGoogle() {
+      google.accounts.id.initialize({
+        client_id:
+          "1077378445609-619i4d5r5kaj12ju2of1bbv3ea13ukbl.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("googleLogin"),
+        { theme: "outline", size: "large" } // customization attributes
+      );
+      google.accounts.id.prompt(); // also display the One Tap dialog
+    };
+  },
   methods: {
     async loginUser() {
       this.apiLoading = true;
       try {
         if (this.$refs.loginForm.validate()) {
           const response = await postLogin(this.email, this.password);
-          console.log(response);
-          console.log("logging with" + this.email);
           localStorage.setItem("ewaybillToken", response.token);
           store.dispatch("userDetails/setUserDetailsAction", {
             email: this.email,
@@ -123,6 +168,14 @@ export default {
         console.log("inside log");
         this.apiLoading = false;
       }
+    },
+    onSignInSuccess(googleUser) {
+      // Handle successful sign-in
+      console.log("Signed in as: " + googleUser.getBasicProfile().getName());
+    },
+    onSignInFailure(error) {
+      // Handle sign-in error
+      console.error(error);
     },
     clear() {
       this.email = "";

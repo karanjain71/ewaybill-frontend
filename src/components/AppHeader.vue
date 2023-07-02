@@ -71,26 +71,31 @@
             <v-icon>mdi-account</v-icon>
           </v-btn>
         </template>
-        <v-list background-color="#3281D5">
+        <v-list background-color="primary">
           <v-list-item>
             <v-list-item-title class="ml-2 bg-primary">
               {{ userDetails.email }}
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click="redirectToProfile">
+          <v-list-item @click="redirectToPath('/profile')">
             <v-icon class="mx-2">mdi-account</v-icon>
             <v-list-item-title class="text-muted"> Profile </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="redirectToPath('/transactions')">
+            <v-icon class="mx-2">mdi-cash</v-icon>
+            <v-list-item-title class="text-muted">
+              My Transactions</v-list-item-title
+            >
           </v-list-item>
           <v-divider />
           <v-list-item>
             <v-btn
               elevation="0"
-              color="#ebf2fb"
+              color="hoverPrimary"
               class="px-15 py-5 ml-2 mt-3 mb-2"
               @click="logoutUser"
-              style="color: #3281d5"
             >
-              Logout
+              <span :style="{ color: '#3281d5' }">Logout</span>
             </v-btn>
           </v-list-item>
         </v-list>
@@ -103,6 +108,7 @@
 import { mapGetters } from "vuex";
 
 import consts from "../helpers/constants.js";
+import router from "./../router/index";
 // import store from './../store/index'
 
 export default {
@@ -140,9 +146,6 @@ export default {
       localStorage.removeItem("ewaybillToken");
       this.$router.push({ path: "/login" });
     },
-    redirectToProfile() {
-      this.$router.push({ path: "/profile" });
-    },
     isMobile() {
       if (window.innerWidth <= 760) {
         return true;
@@ -151,7 +154,6 @@ export default {
       }
     },
     closeDrawer() {
-      console.log("is it getting called");
       console.log(this.isMobile(), window.innerWidth);
       if (this.isMobile()) {
         this.mini = false;
@@ -159,7 +161,11 @@ export default {
       } else {
         this.drawer = true;
         this.mini = !this.mini;
-        console.log(this.drawer, this.mini, "coming here");
+      }
+    },
+    redirectToPath(path) {
+      if (router.currentRoute.path !== path) {
+        router.push({ path });
       }
     },
   },

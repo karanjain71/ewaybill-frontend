@@ -1,7 +1,7 @@
 export default function () {
   return {
     userDetails: {
-      name: "",
+      gstNumber: "",
       email: "",
       phoneNumber: "",
       additionalEmail: "",
@@ -9,6 +9,7 @@ export default function () {
       ifEmailTimeSet: false,
       planType: "",
       planValidTillTime: "",
+      isGoogleLoginEnabled: false,
     },
   };
 }
