@@ -57,8 +57,12 @@ router.beforeEach((to, from, next) => {
         path: "/login",
         query: { redirect: to.fullPath },
       });
+      console.log(to);
+      document.title = "Login | E-tracker";
     } else {
+      document.title = to.name + " | E-tracker";
       next();
+      console.log(to.name);
     }
   } else {
     if (to.name === "LoginPage" && isLoggedIn()) {
@@ -66,6 +70,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
+    document.title = to.name + " | E-tracker";
   }
 });
 

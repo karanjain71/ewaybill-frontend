@@ -21,7 +21,7 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "DashboardPage",
+        name: "Dashboard",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -30,7 +30,7 @@ const routes = [
       },
       {
         path: "/create-ewaybill",
-        name: "CreateEwaybill",
+        name: "Create Ewaybill",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -39,7 +39,7 @@ const routes = [
       },
       {
         path: "/archived-ewaybills",
-        name: "ArchivedEwaybills",
+        name: "Archived Ewaybills",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -48,7 +48,7 @@ const routes = [
       },
       {
         path: "/profile",
-        name: "UserProfile",
+        name: "User Profile",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -57,7 +57,7 @@ const routes = [
       },
       {
         path: "/renew-plan",
-        name: "RenewPlan",
+        name: "Renew Plan",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -66,7 +66,7 @@ const routes = [
       },
       {
         path: "/transactions",
-        name: "MyTransactions",
+        name: "My Transactions",
         meta: {
           protected: true,
           layout: "AuthLayout",
@@ -75,7 +75,7 @@ const routes = [
       },
       {
         path: "/welcome-page",
-        name: "WelcomePage",
+        name: "Welcome",
         meta: {
           protected: true,
           layout: "NonAuthLayout",
@@ -86,7 +86,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "LoginPage",
+    name: "Login",
     meta: {
       protected: false,
       layout: "NonAuthLayout",
@@ -95,7 +95,7 @@ const routes = [
   },
   {
     path: "/register",
-    name: "RegisterPage",
+    name: "Register",
     meta: {
       protected: false,
       layout: "NonAuthLayout",
@@ -104,7 +104,7 @@ const routes = [
   },
   {
     path: "/forgot-password",
-    name: "ForgotPassword",
+    name: "Forgot Password",
     meta: {
       protected: false,
       layout: "NonAuthLayout",
@@ -113,7 +113,7 @@ const routes = [
   },
   {
     path: "/reset-password",
-    name: "ResetPassword",
+    name: "Reset Password",
     meta: {
       protected: false,
       layout: "NonAuthLayout",
@@ -131,7 +131,7 @@ const routes = [
   },
   {
     path: "/testing",
-    name: "TestingPage",
+    name: "Testing",
     meta: {
       protected: false,
       layout: "AuthLayout",
@@ -140,7 +140,7 @@ const routes = [
   },
   {
     path: "/*",
-    name: "PageNotFound",
+    name: "Not Found",
     meta: {
       protected: false,
       layout: "NonAuthLayout",
