@@ -10,7 +10,7 @@ export const postLogin = async (email, password) => {
   return axiosApi
     .post(url.POST_LOGIN, payload, { addToken: false })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "LoggedIn successfully",
           color: "green",
@@ -35,7 +35,7 @@ export const postGoogleLogin = async (email) => {
   return axiosApi
     .post(url.POST_GOOGLE_LOGIN, payload, { addToken: false })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "LoggedIn successfully",
           color: "green",
@@ -58,7 +58,7 @@ export const postRegister = async (payload) => {
   return axiosApi
     .post(url.POST_REGISTER, payload, { addToken: false })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "User registered successfully. Please login to continue",
           color: "green",
@@ -80,7 +80,7 @@ export const postForgotPassword = async (payload) => {
   return axiosApi
     .post(url.POST_FORGOT_PASSWORD, payload, { addToken: false })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: response.data.msg,
           color: "green",
@@ -100,9 +100,9 @@ export const postForgotPassword = async (payload) => {
 
 export const postCreateEwaybill = async (payload) => {
   return axiosApi
-    .post(url.POST_CREATE_EWAYBILL, payload, { addToken: false })
+    .post(url.POST_CREATE_EWAYBILL, payload, { addToken: true })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "Ewaybill Added Successfully",
           color: "green",
@@ -134,7 +134,7 @@ export const postCreateEwaybillPdf = async (payload) => {
       }
     )
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "Ewaybill Added Successfully",
           color: "green",
@@ -156,7 +156,7 @@ export const getAllEwaybills = async () => {
   return axiosApi
     .get(url.GET_ALL_EWAYBILLS, { addToken: true })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         return response.data;
       }
       throw response.data;
@@ -174,7 +174,7 @@ export const getArchivedEwaybills = async () => {
   return axiosApi
     .get(url.GET_ARCHIVED_EWAYBILLS, { addToken: true })
     .then((response) => {
-      if (response.status >= 200 || response.status <= 299) {
+      if (response.status >= 200 && response.status <= 299) {
         return response.data;
       }
       throw response.data;
@@ -192,7 +192,6 @@ export const updateEwaybill = async (payload) => {
   return axiosApi
     .put(url.UPDATE_EWAYBILL + `/${payload.id}`, payload, { addToken: true })
     .then((response) => {
-      console.log(response + " is the respone");
       if (response.status >= 200 && response.status <= 299) {
         store.dispatch("notifications/setNotificationsList", {
           text: "Ewaybill Updated Successfully",
@@ -255,16 +254,17 @@ export const updateUserDetails = async (payload) => {
     .put(url.UPDATE_USER, payload, { addToken: true })
     .then((response) => {
       if (response.status >= 200 && response.status <= 299) {
+        console.log(response);
         return response.data;
       }
       throw response.data;
     })
     .catch((err) => {
+      console.log(JSON.stringify(err), " err");
       store.dispatch("notifications/setNotificationsList", {
         text: "Unable to update user profile",
         color: "red",
       });
-      console.log(err);
     });
 };
 
@@ -411,4 +411,3 @@ export const getMyTransactions = async () => {
       return err.response.data.success;
     });
 };
-

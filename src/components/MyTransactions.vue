@@ -70,9 +70,14 @@ export default {
   },
   async created() {
     this.loadingScreen = true;
-    const response = await getMyTransactions();
-    this.transactions = response;
-    this.loadingScreen = false;
+    try {
+      const response = await getMyTransactions();
+      this.transactions = response;
+    } catch (err) {
+      console.log("Error getting my transactions ", err);
+    } finally {
+      this.loadingScreen = false;
+    }
   },
   methods: {
     formatLocalDateTime,

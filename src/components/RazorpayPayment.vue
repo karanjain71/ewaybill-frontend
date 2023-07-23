@@ -36,68 +36,72 @@ export default {
   },
   async created() {
     console.log(this.payment_amount);
-    const newOrderId = await createOrderId(this.payment_amount);
-    const result = await this.loadRazorPay();
-    if (!result) {
-      console.log("Failed to load razorpay script");
-      return;
-    }
-    const options = {
-      key: process.env.VUE_APP_RAZORPAY_KEY,
-      amount: this.payment_amount,
-      currency: `INR`,
-      name: this.userDetails.name,
-      image: logo,
-      description: `E-tracker subscription`,
-      order_id: newOrderId,
-      handler: async (response) => {
-        console.log(response);
-        await createOrder({
-          orderId: response.razorpay_order_id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpaySignature: response.razorpay_signature,
-          amount: this.payment_amount,
-        });
-        store.dispatch("userDetails/setUserDetailsAction", {
-          email:this.userDetails.email,
-        });
-        store.dispatch("payments/setPaymentModalAction", false);
-      },
-      prefill: {
+    try {
+      const newOrderId = await createOrderId(this.payment_amount);
+      const result = await this.loadRazorPay();
+      if (!result) {
+        console.log("Failed to load razorpay script");
+        return;
+      }
+      const options = {
+        key: process.env.VUE_APP_RAZORPAY_KEY,
+        amount: this.payment_amount,
+        currency: `INR`,
         name: this.userDetails.name,
-        email: this.userDetails.email,
-        contact: this.userDetails.phoneNumber,
-      },
-      modal: {
-        ondismiss: function () {
+        image: logo,
+        description: `E-tracker subscription`,
+        order_id: newOrderId,
+        handler: async (response) => {
+          console.log(response);
+          await createOrder({
+            orderId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+            amount: this.payment_amount,
+          });
+          store.dispatch("userDetails/setUserDetailsAction", {
+            email: this.userDetails.email,
+          });
           store.dispatch("payments/setPaymentModalAction", false);
-          
-          console.log("Checkout form closed");
         },
-      },
-      remember_customer: true,
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.on("payment.failed", function (response) {
-      console.log(response.error.code);
-      console.log(response.error.description);
-      console.log(response.error.source);
-      console.log(response.error.step);
-      console.log(response.error.reason);
-      console.log(response.error.metadata.order_id);
-      console.log(response.error.metadata.payment_id);
-    });
-    paymentObject.on("payment.success", function (response) {
-      console.log("Inside success");
-      console.log(response.error.code);
-      console.log(response.error.description);
-      console.log(response.error.source);
-      console.log(response.error.step);
-      console.log(response.error.reason);
-      console.log(response.error.metadata.order_id);
-      console.log(response.error.metadata.payment_id);
-    });
-    paymentObject.open();
+        prefill: {
+          name: this.userDetails.name,
+          email: this.userDetails.email,
+          contact: this.userDetails.phoneNumber,
+        },
+        modal: {
+          ondismiss: function () {
+            store.dispatch("payments/setPaymentModalAction", false);
+
+            console.log("Checkout form closed");
+          },
+        },
+        remember_customer: true,
+      };
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.on("payment.failed", function (response) {
+        console.log(response.error.code);
+        console.log(response.error.description);
+        console.log(response.error.source);
+        console.log(response.error.step);
+        console.log(response.error.reason);
+        console.log(response.error.metadata.order_id);
+        console.log(response.error.metadata.payment_id);
+      });
+      paymentObject.on("payment.success", function (response) {
+        console.log("Inside success");
+        console.log(response.error.code);
+        console.log(response.error.description);
+        console.log(response.error.source);
+        console.log(response.error.step);
+        console.log(response.error.reason);
+        console.log(response.error.metadata.order_id);
+        console.log(response.error.metadata.payment_id);
+      });
+      paymentObject.open();
+    } catch (err) {
+      console.log("Error while doing payment ", err);
+    }
   },
   computed: {
     snackbars() {

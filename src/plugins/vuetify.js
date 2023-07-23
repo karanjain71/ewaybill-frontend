@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
 
 Vue.use(Vuetify);
-
+// VBtn.options.props.ripple.default = false;
 const vuetify = new Vuetify({
   theme: {
     themes: {
@@ -14,6 +14,13 @@ const vuetify = new Vuetify({
         error: "#b71c1c",
       },
       dark: {},
+    },
+    components: {
+      VBtn: {
+        defaultProps: {
+          outlined: true,
+        },
+      },
     },
     light: true,
   },

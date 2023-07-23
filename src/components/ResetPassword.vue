@@ -101,14 +101,19 @@ export default {
       const token = window.location.search.split("=")[1];
       if (this.newPassword === this.confirmPassword) {
         this.apiLoading = true;
-        const response = await resetUserPasswordLink({
-          newPassword: this.newPassword,
-          resetToken: token,
-        });
-        this.apiLoading = false;
-        if (response == true) {
-          this.newPassword = "";
-          this.confirmPassword = "";
+        try {
+          const response = await resetUserPasswordLink({
+            newPassword: this.newPassword,
+            resetToken: token,
+          });
+          if (response == true) {
+            this.newPassword = "";
+            this.confirmPassword = "";
+          }
+        } catch (e) {
+          console.log("Reset password error -", e);
+        } finally {
+          this.apiLoading = false;
         }
       } else {
         store.dispatch("notifications/setNotificationsList", {

@@ -121,7 +121,18 @@ export default {
   background-color: #188cd8 !important;
   color: white !important;
 }
+
 .dialog-card {
   border-radius: 16px !important;
+}
+
+.badge .badge::before {
+  content: "Hello buddy" !important;
+  position: relative !important;
+  /* top: 0px;
+  left: 0px; */
+}
+.v-ripple__container {
+  display: none !important;
 }
 </style>

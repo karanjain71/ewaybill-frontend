@@ -62,7 +62,9 @@
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogMsg }}
           <v-spacer />
-          <v-icon @click="closeDialog">mdi-close</v-icon>
+          <v-btn icon @click="closeDialog">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
         <v-form v-if="deliveryModal" class="mx-9 mt-3">
           <v-date-picker
@@ -255,6 +257,7 @@ export default {
 
   data() {
     return {
+      hover: false,
       ewaybills: [],
       apiLoading: false,
       loadingScreen: false,
@@ -316,10 +319,14 @@ export default {
   },
   async created() {
     this.loadingScreen = true;
-    const response = await getAllEwaybills();
-    this.loadingScreen = false;
-    this.ewaybills = response;
-    console.log(this.ewaybills);
+    try {
+      const response = await getAllEwaybills();
+      this.ewaybills = response;
+    } catch {
+      console.log("Error");
+    } finally {
+      this.loadingScreen = false;
+    }
   },
   methods: {
     async changeStatus() {
@@ -353,8 +360,6 @@ export default {
         this.dialogMsg = "Please enter delivery date";
         this.dialog = true;
         this.deliveryModal = true;
-        console.log(payload);
-        console.log("here");
         this.deliveryDatePayload = payload;
       }
     },
@@ -372,32 +377,36 @@ export default {
       this.editId = item.id;
       this.ewaybillNumber = item.ewaybillNumber;
       this.distance = item.distance;
-      this.generationTime = new Date(item.generationTime)
-        .toISOString()
-        .slice(0, 10);
+      console.log([item.generationTime]);
+      const year = item.generationTime[0];
+      const month = String(item.generationTime[1]).padStart(2, "0"); // Adding 1 to the month since it's zero-indexed
+      const day = String(item.generationTime[2]).padStart(2, "0");
+      this.generationTime = `${year}-${month}-${day}`;
       this.sourceAddress = item.sourceAddress;
       this.destinationAddress = item.destAddress;
       this.partyName = item.partyName;
       this.vehicleNumber = item.vehicleNumber;
-      console.log(item);
     },
     async submitEditEwaybill() {
-      const response = await updateEwaybill({
-        id: this.editId,
-        ewaybillNumber: this.ewaybillNumber,
-        distance: this.distance,
-        generationTime: this.generationTime,
-        sourceAddress: this.sourceAddress,
-        destAddress: this.destinationAddress,
-        partyName: this.partyName,
-        status: this.status,
-        vehicleNumber: this.vehicleNumber,
-      });
-      this.showEditModal = false;
-      this.$nextTick(async () => {
-        this.ewaybills = await getAllEwaybills();
-      });
-      console.log(response);
+      try {
+        await updateEwaybill({
+          id: this.editId,
+          ewaybillNumber: this.ewaybillNumber,
+          distance: this.distance,
+          generationTime: new Date(this.generationTime),
+          sourceAddress: this.sourceAddress,
+          destAddress: this.destinationAddress,
+          partyName: this.partyName,
+          status: this.status,
+          vehicleNumber: this.vehicleNumber,
+        });
+        this.showEditModal = false;
+        this.$nextTick(async () => {
+          this.ewaybills = await getAllEwaybills();
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     deleteEwaybill(item) {
       this.dialogMsg = "Are you sure you want to delete this item?";

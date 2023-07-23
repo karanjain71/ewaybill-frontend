@@ -11,6 +11,7 @@ import WelcomePage from "../components/WelcomePage.vue";
 import RenewPlan from "../components/RenewPlan.vue";
 import PricingPage from "../components/PricingPage.vue";
 import MyTransactions from "../components/MyTransactions.vue";
+import TestingPage from "../components/TestingPage.vue";
 
 const routes = [
   {
@@ -127,6 +128,15 @@ const routes = [
       layout: "NonAuthLayout",
     },
     component: PricingPage,
+  },
+  {
+    path: "/testing",
+    name: "TestingPage",
+    meta: {
+      protected: false,
+      layout: "AuthLayout",
+    },
+    component: TestingPage,
   },
   {
     path: "/*",

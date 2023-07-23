@@ -165,7 +165,9 @@
         <v-card-title class="text-h8 pt-7 pl-9" style="font-weight: 500">
           {{ dialogTitle }}
           <v-spacer />
-          <v-icon @click="closeDialog">mdi-close</v-icon>
+          <v-btn icon @click="closeDialog">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-card-title>
         <v-form>
           <v-card-subtitle
@@ -414,10 +416,6 @@ export default {
     planValidTillTime: "",
     apiLoading: false,
   }),
-  async created() {
-    this.fetchUserDetails();
-    // console.log(response)
-  },
   computed: {
     snackbars() {
       return store.getters["notifications/getNotificationsList"];
@@ -464,31 +462,19 @@ export default {
     },
     async updateAccountDetails() {
       this.apiLoading = true;
-      await updateUserDetails({
-        email: this.userDetails.email,
-        additionalEmail: this.userDetails.additionalEmail,
-        phoneNumber: this.userDetails.phoneNumber,
-        emailTime: this.userDetails.emailTime,
-      });
-      this.apiLoading = false;
-      this.dialog = false;
-
-      // this.fetchUserDetails()
-      store.dispatch("notifications/setNotificationsList", {
-        text: "Updated User Data Successfully",
-        color: "green",
-      });
-    },
-    async fetchUserDetails() {
-      this.loadingScreen = true;
-      // const response = await getUserDetails();
-      // this.password = `********`
-      // this.email = response?.email
-      // this.name = response?.name
-      // this.additionalEmail = response?.additionalEmail
-      // this.phoneNumber = response?.phoneNumber
-
-      this.loadingScreen = false;
+      try {
+        await updateUserDetails({
+          email: this.userDetails.email,
+          additionalEmail: this.userDetails.additionalEmail,
+          phoneNumber: this.userDetails.phoneNumber,
+          emailTime: this.userDetails.emailTime,
+        });
+        this.dialog = false;
+      } catch (e) {
+        console.log("Error in updating user ", e);
+      } finally {
+        this.apiLoading = false;
+      }
     },
     async resetPassword() {
       if (this.confirmPassword === this.newPassword) {

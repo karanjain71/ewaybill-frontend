@@ -5,26 +5,30 @@
         <h2 class="my-8">Choose the plan that fits for you</h2>
       </v-col>
     </v-row>
-    <v-card
-      rounded
-      :class="
-        monthly == false
-          ? 'mx-auto my-4 px-6 py-4 rounded-lg card active-card'
-          : 'mx-auto my-4 px-6 py-4 rounded-lg card'
-      "
-      max-width="500"
-      elevation="0"
-      outlined
-      @click="changePlan('yearly')"
-      append="mdi-magnify"
-    >
-      <!-- <v-icon class="icon-left">mdi-magnify</v-icon> -->
-      <v-card-title>Premium Yearly</v-card-title>
-      <v-card-title><span>&#8377;</span>100/month</v-card-title>
-      <v-card-subtitle class="my-1"
-        ><span>&#8377;</span>1,200 paid annually</v-card-subtitle
-      >
-    </v-card>
+    <v-row class="mx-0" no-gutters>
+      <v-col>
+        <v-card
+          rounded
+          :class="
+            monthly == false
+              ? 'mx-auto my-4 px-6 py-4 rounded-lg card active-card'
+              : 'mx-auto my-4 px-6 py-4 rounded-lg card'
+          "
+          max-width="500px"
+          elevation="0"
+          outlined
+          @click="changePlan('yearly')"
+          append="mdi-magnify"
+        >
+          <div class="ribbon"><span>Best Deal</span></div>
+          <v-card-title>Premium Yearly</v-card-title>
+          <v-card-title><span>&#8377;</span>100/month</v-card-title>
+          <v-card-subtitle class="my-1"
+            ><span>&#8377;</span>1,200 paid annually</v-card-subtitle
+          >
+        </v-card>
+      </v-col>
+    </v-row>
     <div class="divider-breaker"><span>or</span></div>
 
     <!-- <v-divider class="mx-20 my-4" /> -->
@@ -140,5 +144,55 @@ export default {
 }
 .hello {
   border: 7px solid black;
+}
+.ribbon {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  width: 100px;
+  display: block;
+  background: #188cd8;
+  background: linear-gradient(#188cd8 0%, #188cd8 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 19px;
+  left: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #188cd8;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #188cd8;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #188cd8;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #188cd8;
 }
 </style>

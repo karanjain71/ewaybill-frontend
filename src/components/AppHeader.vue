@@ -7,19 +7,19 @@
       dark
       class="nav-color"
     >
-      <v-list-item class="">
+      <v-list-item class="my-2">
         <v-list-item-icon>
           <router-link to="/" style="text-decoration: none">
             <v-img
               src="../assets/images/logo.png"
               max-height="30"
-              max-width="30"
+              max-width="25"
             ></v-img>
           </router-link>
         </v-list-item-icon>
         <v-list-item-content>
           <router-link to="/" style="text-decoration: none">
-            <v-list-item-title style="color: white; font-size: 1.4rem">{{
+            <v-list-item-title style="color: white; font-size: 1.2rem">{{
               consts.APP_TITLE
             }}</v-list-item-title>
           </router-link>
@@ -44,9 +44,7 @@
             active-class="selected-tile-active"
             v-for="item in items[index]"
             :key="item"
-            :to="item.title != 'Standard Change' ? item.route : null"
-            :href="item.title == 'Standard Change' ? item.link : null"
-            :target="item.title == 'Standard Change' ? '_blank' : null"
+            :to="item.route"
             link
           >
             <v-list-item-icon>
@@ -77,11 +75,17 @@
               {{ userDetails.email }}
             </v-list-item-title>
           </v-list-item>
-          <v-list-item @click="redirectToPath('/profile')">
+          <v-list-item
+            class="mx-2 my-2 rounded-lg"
+            @click="redirectToPath('/profile')"
+          >
             <v-icon class="mx-2">mdi-account</v-icon>
             <v-list-item-title class="text-muted"> Profile </v-list-item-title>
           </v-list-item>
-          <v-list-item @click="redirectToPath('/transactions')">
+          <v-list-item
+            class="mx-2 my-2 rounded-lg rounded"
+            @click="redirectToPath('/transactions')"
+          >
             <v-icon class="mx-2">mdi-cash</v-icon>
             <v-list-item-title class="text-muted">
               My Transactions</v-list-item-title
@@ -191,5 +195,8 @@ export default {
 }
 .v-navigation-drawer--close.v-navigation-drawer--temporary {
   transform: translateX(-13vw) !important;
+}
+.rounded {
+  border-radius: 5px;
 }
 </style>

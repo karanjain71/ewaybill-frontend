@@ -194,6 +194,7 @@ import {
   postCreateEwaybillPdf,
 } from "../helpers/backend_helper";
 import store from "@/store/index";
+import { mapGetters } from "vuex";
 
 export default {
   name: "CreateEwaybill",
@@ -223,12 +224,21 @@ export default {
     partyNameRules: [(v) => !!v || "Party Name is required"],
     vehicleNumberRules: [(v) => !!v || "Vehicle Number is required"],
   }),
+  computed: {
+    snackbars() {
+      return store.getters["notifications/getNotificationsList"];
+    },
+    ...mapGetters({
+      userDetails: "userDetails/getUserDetails",
+    }),
+  },
   methods: {
     async uploadEwaybill() {
       const payload = {
+        gstNumber: this.userDetails.gstNumber,
         ewaybillNumber: this.ewaybill_number,
         distance: this.distance,
-        generationTime: this.generation_time,
+        generationTime: new Date(this.generation_time),
         sourceAddress: this.source_address,
         destAddress: this.destination_address,
         status: this.status,
@@ -236,10 +246,12 @@ export default {
         partyName: this.party_name,
       };
       if (this.$refs.manualForm.validate()) {
-        const response = postCreateEwaybill(payload);
-        console.log("coming here ");
-        this.$refs.manualForm.reset();
-        console.log(response);
+        try {
+          await postCreateEwaybill(payload);
+          this.$refs.manualForm.reset();
+        } catch (err) {
+          console.log("Error while uploading ewaybill ", err);
+        }
       } else {
         store.dispatch("notifications/setNotificationsList", {
           text: "Error in form. Please fill all fields properly",
